@@ -651,6 +651,388 @@ paths:
       summary: Begin social login
       tags:
       - Auth
+  /clusters:
+    get:
+      description: Returns clusters for the organization in X-Org-ID. Filter by `q`
+        (name contains).
+      operationId: ListClusters
+      parameters:
+      - description: Organization UUID
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      - description: Name contains (case-insensitive)
+        in: query
+        name: q
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/dto.ClusterResponse"
+                type: array
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: failed to list clusters
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: List clusters (org scoped)
+      tags:
+      - Clusters
+    post:
+      description: "Creates a cluster. If `kubeconfig` is provided, it will be encrypted\
+        \ per-organization and stored securely (never returned)."
+      operationId: CreateCluster
+      parameters:
+      - description: Organization UUID
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.CreateClusterRequest"
+        description: payload
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: invalid json
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: create failed
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Create cluster (org scoped)
+      tags:
+      - Clusters
+      x-codegen-request-body-name: body
+  /credentials:
+    get:
+      description: Returns credential metadata for the current org. Secrets are never
+        returned.
+      operationId: ListCredentials
+      parameters:
+      - description: Organization ID (UUID)
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      - description: "Filter by provider (e.g., aws)"
+        in: query
+        name: provider
+        schema:
+          type: string
+      - description: "Filter by kind (e.g., aws_access_key)"
+        in: query
+        name: kind
+        schema:
+          type: string
+      - description: Filter by scope kind (provider/service/resource)
+        in: query
+        name: scope_kind
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/dto.CredentialOut"
+                type: array
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: internal server error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: List credentials (metadata only)
+      tags:
+      - Credentials
+    post:
+      operationId: CreateCredential
+      parameters:
+      - description: Organization ID (UUID)
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.CreateCredentialRequest"
+        description: Credential payload
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.CredentialOut"
+          description: Created
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: internal server error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Create a credential (encrypts secret)
+      tags:
+      - Credentials
+      x-codegen-request-body-name: body
+  /credentials/{id}:
+    delete:
+      operationId: DeleteCredential
+      parameters:
+      - description: Organization ID (UUID)
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      - description: Credential ID (UUID)
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: No Content
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Delete credential
+      tags:
+      - Credentials
+    get:
+      operationId: GetCredential
+      parameters:
+      - description: Organization ID (UUID)
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      - description: Credential ID (UUID)
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.CredentialOut"
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: internal server error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Get credential by ID (metadata only)
+      tags:
+      - Credentials
+    patch:
+      operationId: UpdateCredential
+      parameters:
+      - description: Organization ID (UUID)
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      - description: Credential ID (UUID)
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.UpdateCredentialRequest"
+        description: Fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.CredentialOut"
+          description: OK
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: X-Org-ID required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Update credential metadata and/or rotate secret
+      tags:
+      - Credentials
+      x-codegen-request-body-name: body
+  /credentials/{id}/reveal:
+    post:
+      operationId: RevealCredential
+      parameters:
+      - description: Organization ID (UUID)
+        in: header
+        name: X-Org-ID
+        schema:
+          type: string
+      - description: Credential ID (UUID)
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+          description: OK
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Reveal decrypted secret (one-time read)
+      tags:
+      - Credentials
   /healthz:
     get:
       description: Returns 200 OK when the service is up
@@ -3352,6 +3734,20 @@ paths:
       tags:
       - Taints
       x-codegen-request-body-name: body
+  /version:
+    get:
+      description: Returns build/runtime metadata for the running service.
+      operationId: Version                 // operationId
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handlers.VersionResponse"
+          description: OK
+      summary: Service version information
+      tags:
+      - Meta
 components:
   schemas:
     dto.AnnotationResponse:
@@ -3412,12 +3808,282 @@ components:
           example: https://accounts.google.com/o/oauth2/v2/auth?client_id=...
           type: string
       type: object
+    dto.ClusterResponse:
+      example:
+        bastion_server:
+          hostname: hostname
+          public_ip_address: public_ip_address
+          role: master|worker|bastion
+          updated_at: updated_at
+          ssh_key_id: ssh_key_id
+          organization_id: organization_id
+          created_at: created_at
+          private_ip_address: private_ip_address
+          id: id
+          ssh_user: ssh_user
+          status: pending|provisioning|ready|failed
+        certificate_key: certificate_key
+        cluster_load_balancer: cluster_load_balancer
+        created_at: created_at
+        captain_domain: captain_domain
+        updated_at: updated_at
+        provider: provider
+        random_token: random_token
+        name: name
+        node_pools:
+        - role: master
+          servers:
+          - hostname: hostname
+            public_ip_address: public_ip_address
+            role: master|worker|bastion
+            updated_at: updated_at
+            ssh_key_id: ssh_key_id
+            organization_id: organization_id
+            created_at: created_at
+            private_ip_address: private_ip_address
+            id: id
+            ssh_user: ssh_user
+            status: pending|provisioning|ready|failed
+          - hostname: hostname
+            public_ip_address: public_ip_address
+            role: master|worker|bastion
+            updated_at: updated_at
+            ssh_key_id: ssh_key_id
+            organization_id: organization_id
+            created_at: created_at
+            private_ip_address: private_ip_address
+            id: id
+            ssh_user: ssh_user
+            status: pending|provisioning|ready|failed
+          updated_at: updated_at
+          organization_id: organization_id
+          name: name
+          annotations:
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          created_at: created_at
+          id: id
+          taints:
+          - updated_at: updated_at
+            effect: effect
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          - updated_at: updated_at
+            effect: effect
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          labels:
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+        - role: master
+          servers:
+          - hostname: hostname
+            public_ip_address: public_ip_address
+            role: master|worker|bastion
+            updated_at: updated_at
+            ssh_key_id: ssh_key_id
+            organization_id: organization_id
+            created_at: created_at
+            private_ip_address: private_ip_address
+            id: id
+            ssh_user: ssh_user
+            status: pending|provisioning|ready|failed
+          - hostname: hostname
+            public_ip_address: public_ip_address
+            role: master|worker|bastion
+            updated_at: updated_at
+            ssh_key_id: ssh_key_id
+            organization_id: organization_id
+            created_at: created_at
+            private_ip_address: private_ip_address
+            id: id
+            ssh_user: ssh_user
+            status: pending|provisioning|ready|failed
+          updated_at: updated_at
+          organization_id: organization_id
+          name: name
+          annotations:
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          created_at: created_at
+          id: id
+          taints:
+          - updated_at: updated_at
+            effect: effect
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          - updated_at: updated_at
+            effect: effect
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          labels:
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+          - updated_at: updated_at
+            organization_id: organization_id
+            created_at: created_at
+            id: id
+            value: value
+            key: key
+        control_load_balancer: control_load_balancer
+        id: id
+        region: region
+        status: status
+      properties:
+        bastion_server:
+          $ref: "#/components/schemas/dto.ServerResponse"
+        captain_domain:
+          type: string
+        certificate_key:
+          type: string
+        cluster_load_balancer:
+          type: string
+        control_load_balancer:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+        node_pools:
+          items:
+            $ref: "#/components/schemas/dto.NodePoolResponse"
+          type: array
+        provider:
+          type: string
+        random_token:
+          type: string
+        region:
+          type: string
+        status:
+          type: string
+        updated_at:
+          type: string
+      type: object
     dto.CreateAnnotationRequest:
       properties:
         key:
           type: string
         value:
           type: string
+      type: object
+    dto.CreateClusterRequest:
+      properties:
+        captain_domain:
+          type: string
+        cluster_load_balancer:
+          type: string
+        control_load_balancer:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        region:
+          type: string
+        status:
+          type: string
+      type: object
+    dto.CreateCredentialRequest:
+      properties:
+        account_id:
+          maxLength: 32
+          type: string
+        kind:
+          description: "aws_access_key, api_token, basic_auth, oauth2"
+          type: string
+        name:
+          description: human label
+          maxLength: 100
+          type: string
+        provider:
+          enum:
+          - aws
+          - cloudflare
+          - hetzner
+          - digitalocean
+          - generic
+          type: string
+        region:
+          maxLength: 32
+          type: string
+        schema_version:
+          description: secret schema version
+          minimum: 1
+          type: integer
+        scope:
+          description: "{\"service\":\"route53\"} or {\"arn\":\"...\"}"
+          properties: {}
+          type: object
+        scope_kind:
+          enum:
+          - provider
+          - service
+          - resource
+          type: string
+        scope_version:
+          description: scope schema version
+          minimum: 1
+          type: integer
+        secret:
+          description: encrypted later
+          properties: {}
+          type: object
+      required:
+      - kind
+      - provider
+      - schema_version
+      - scope
+      - scope_kind
+      - scope_version
+      - secret
       type: object
     dto.CreateLabelRequest:
       properties:
@@ -3487,7 +4153,61 @@ components:
         value:
           type: string
       type: object
+    dto.CredentialOut:
+      example:
+        schema_version: 0
+        account_id: account_id
+        scope_version: 6
+        updated_at: updated_at
+        provider: provider
+        kind: kind
+        scope: "{}"
+        name: name
+        scope_kind: scope_kind
+        created_at: created_at
+        id: id
+        region: region
+      properties:
+        account_id:
+          type: string
+        created_at:
+          type: string
+        id:
+          type: string
+        kind:
+          type: string
+        name:
+          type: string
+        provider:
+          type: string
+        region:
+          type: string
+        schema_version:
+          type: integer
+        scope:
+          properties: {}
+          type: object
+        scope_kind:
+          type: string
+        scope_version:
+          type: integer
+        updated_at:
+          type: string
+      type: object
     dto.EnqueueRequest:
+      properties:
+        payload:
+          properties: {}
+          type: object
+        queue:
+          example: default
+          type: string
+        run_at:
+          example: 2025-11-05T08:00:00Z
+          type: string
+        type:
+          example: email.send
+          type: string
       type: object
     dto.JWK:
       example:
@@ -3968,6 +4688,26 @@ components:
         value:
           type: string
       type: object
+    dto.UpdateCredentialRequest:
+      properties:
+        account_id:
+          type: string
+        name:
+          type: string
+        region:
+          type: string
+        scope:
+          properties: {}
+          type: object
+        scope_kind:
+          type: string
+        scope_version:
+          type: integer
+        secret:
+          description: set if rotating
+          properties: {}
+          type: object
+      type: object
     dto.UpdateLabelRequest:
       properties:
         key:
@@ -4028,6 +4768,54 @@ components:
       properties:
         status:
           example: ok
+          type: string
+      type: object
+    handlers.VersionResponse:
+      example:
+        goArch: amd64
+        builtBy: ci
+        built: 2025-11-08T12:34:56Z
+        commitTime: 2025-11-08T12:31:00Z
+        vcs: git
+        commit: a1b2c3d
+        go: go1.23.3
+        modified: false
+        goOS: linux
+        version: 1.4.2
+        revision: a1b2c3d4e5f6abcdef
+      properties:
+        built:
+          example: 2025-11-08T12:34:56Z
+          type: string
+        builtBy:
+          example: ci
+          type: string
+        commit:
+          example: a1b2c3d
+          type: string
+        commitTime:
+          example: 2025-11-08T12:31:00Z
+          type: string
+        go:
+          example: go1.23.3
+          type: string
+        goArch:
+          example: amd64
+          type: string
+        goOS:
+          example: linux
+          type: string
+        modified:
+          example: false
+          type: boolean
+        revision:
+          example: a1b2c3d4e5f6abcdef
+          type: string
+        vcs:
+          example: git
+          type: string
+        version:
+          example: 1.4.2
           type: string
       type: object
     handlers.createUserKeyRequest:

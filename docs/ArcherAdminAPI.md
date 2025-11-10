@@ -103,7 +103,7 @@ import (
 )
 
 func main() {
-	body := map[string]interface{}{ ... } // map[string]interface{} | Job parameters
+	body := *openapiclient.NewDtoEnqueueRequest() // DtoEnqueueRequest | Job parameters
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -128,7 +128,7 @@ Other parameters are passed through a pointer to a apiAdminEnqueueArcherJobReque
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | **map[string]interface{}** | Job parameters | 
+ **body** | [**DtoEnqueueRequest**](DtoEnqueueRequest.md) | Job parameters | 
 
 ### Return type
 

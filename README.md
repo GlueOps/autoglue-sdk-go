@@ -93,6 +93,14 @@ Class | Method | HTTP request | Description
 *AuthAPI* | [**GetJWKS**](docs/AuthAPI.md#getjwks) | **Get** /.well-known/jwks.json | Get JWKS
 *AuthAPI* | [**Logout**](docs/AuthAPI.md#logout) | **Post** /auth/logout | Revoke refresh token family (logout everywhere)
 *AuthAPI* | [**Refresh**](docs/AuthAPI.md#refresh) | **Post** /auth/refresh | Rotate refresh token
+*ClustersAPI* | [**CreateCluster**](docs/ClustersAPI.md#createcluster) | **Post** /clusters | Create cluster (org scoped)
+*ClustersAPI* | [**ListClusters**](docs/ClustersAPI.md#listclusters) | **Get** /clusters | List clusters (org scoped)
+*CredentialsAPI* | [**CreateCredential**](docs/CredentialsAPI.md#createcredential) | **Post** /credentials | Create a credential (encrypts secret)
+*CredentialsAPI* | [**DeleteCredential**](docs/CredentialsAPI.md#deletecredential) | **Delete** /credentials/{id} | Delete credential
+*CredentialsAPI* | [**GetCredential**](docs/CredentialsAPI.md#getcredential) | **Get** /credentials/{id} | Get credential by ID (metadata only)
+*CredentialsAPI* | [**ListCredentials**](docs/CredentialsAPI.md#listcredentials) | **Get** /credentials | List credentials (metadata only)
+*CredentialsAPI* | [**RevealCredential**](docs/CredentialsAPI.md#revealcredential) | **Post** /credentials/{id}/reveal | Reveal decrypted secret (one-time read)
+*CredentialsAPI* | [**UpdateCredential**](docs/CredentialsAPI.md#updatecredential) | **Patch** /credentials/{id} | Update credential metadata and/or rotate secret
 *HealthAPI* | [**HealthCheckOperationId**](docs/HealthAPI.md#healthcheckoperationid) | **Get** /healthz | Basic health check
 *LabelsAPI* | [**CreateLabel**](docs/LabelsAPI.md#createlabel) | **Post** /labels | Create label (org scoped)
 *LabelsAPI* | [**DeleteLabel**](docs/LabelsAPI.md#deletelabel) | **Delete** /labels/{id} | Delete label (org scoped)
@@ -104,6 +112,7 @@ Class | Method | HTTP request | Description
 *MeAPIKeysAPI* | [**CreateUserAPIKey**](docs/MeAPIKeysAPI.md#createuserapikey) | **Post** /me/api-keys | Create a new user API key
 *MeAPIKeysAPI* | [**DeleteUserAPIKey**](docs/MeAPIKeysAPI.md#deleteuserapikey) | **Delete** /me/api-keys/{id} | Delete a user API key
 *MeAPIKeysAPI* | [**ListUserAPIKeys**](docs/MeAPIKeysAPI.md#listuserapikeys) | **Get** /me/api-keys | List my API keys
+*MetaAPI* | [**VersionOperationId**](docs/MetaAPI.md#versionoperationid) | **Get** /version | Service version information
 *NodePoolsAPI* | [**AttachNodePoolAnnotations**](docs/NodePoolsAPI.md#attachnodepoolannotations) | **Post** /node-pools/{id}/annotations | Attach annotation to a node pool (org scoped)
 *NodePoolsAPI* | [**AttachNodePoolLabels**](docs/NodePoolsAPI.md#attachnodepoollabels) | **Post** /node-pools/{id}/labels | Attach labels to a node pool (org scoped)
 *NodePoolsAPI* | [**AttachNodePoolServers**](docs/NodePoolsAPI.md#attachnodepoolservers) | **Post** /node-pools/{id}/servers | Attach servers to a node pool (org scoped)
@@ -157,12 +166,17 @@ Class | Method | HTTP request | Description
  - [DtoAttachServersRequest](docs/DtoAttachServersRequest.md)
  - [DtoAttachTaintsRequest](docs/DtoAttachTaintsRequest.md)
  - [DtoAuthStartResponse](docs/DtoAuthStartResponse.md)
+ - [DtoClusterResponse](docs/DtoClusterResponse.md)
  - [DtoCreateAnnotationRequest](docs/DtoCreateAnnotationRequest.md)
+ - [DtoCreateClusterRequest](docs/DtoCreateClusterRequest.md)
+ - [DtoCreateCredentialRequest](docs/DtoCreateCredentialRequest.md)
  - [DtoCreateLabelRequest](docs/DtoCreateLabelRequest.md)
  - [DtoCreateNodePoolRequest](docs/DtoCreateNodePoolRequest.md)
  - [DtoCreateSSHRequest](docs/DtoCreateSSHRequest.md)
  - [DtoCreateServerRequest](docs/DtoCreateServerRequest.md)
  - [DtoCreateTaintRequest](docs/DtoCreateTaintRequest.md)
+ - [DtoCredentialOut](docs/DtoCredentialOut.md)
+ - [DtoEnqueueRequest](docs/DtoEnqueueRequest.md)
  - [DtoJWK](docs/DtoJWK.md)
  - [DtoJWKS](docs/DtoJWKS.md)
  - [DtoJob](docs/DtoJob.md)
@@ -179,6 +193,7 @@ Class | Method | HTTP request | Description
  - [DtoTaintResponse](docs/DtoTaintResponse.md)
  - [DtoTokenPair](docs/DtoTokenPair.md)
  - [DtoUpdateAnnotationRequest](docs/DtoUpdateAnnotationRequest.md)
+ - [DtoUpdateCredentialRequest](docs/DtoUpdateCredentialRequest.md)
  - [DtoUpdateLabelRequest](docs/DtoUpdateLabelRequest.md)
  - [DtoUpdateNodePoolRequest](docs/DtoUpdateNodePoolRequest.md)
  - [DtoUpdateServerRequest](docs/DtoUpdateServerRequest.md)
@@ -194,6 +209,7 @@ Class | Method | HTTP request | Description
  - [HandlersOrgUpdateReq](docs/HandlersOrgUpdateReq.md)
  - [HandlersUpdateMeRequest](docs/HandlersUpdateMeRequest.md)
  - [HandlersUserAPIKeyOut](docs/HandlersUserAPIKeyOut.md)
+ - [HandlersVersionResponse](docs/HandlersVersionResponse.md)
  - [ModelsAPIKey](docs/ModelsAPIKey.md)
  - [ModelsOrganization](docs/ModelsOrganization.md)
  - [ModelsUser](docs/ModelsUser.md)

@@ -54,6 +54,10 @@ type APIClient struct {
 
 	AuthAPI *AuthAPIService
 
+	ClustersAPI *ClustersAPIService
+
+	CredentialsAPI *CredentialsAPIService
+
 	HealthAPI *HealthAPIService
 
 	LabelsAPI *LabelsAPIService
@@ -61,6 +65,8 @@ type APIClient struct {
 	MeAPI *MeAPIService
 
 	MeAPIKeysAPI *MeAPIKeysAPIService
+
+	MetaAPI *MetaAPIService
 
 	NodePoolsAPI *NodePoolsAPIService
 
@@ -92,10 +98,13 @@ func NewAPIClient(cfg *Configuration) *APIClient {
 	c.AnnotationsAPI = (*AnnotationsAPIService)(&c.common)
 	c.ArcherAdminAPI = (*ArcherAdminAPIService)(&c.common)
 	c.AuthAPI = (*AuthAPIService)(&c.common)
+	c.ClustersAPI = (*ClustersAPIService)(&c.common)
+	c.CredentialsAPI = (*CredentialsAPIService)(&c.common)
 	c.HealthAPI = (*HealthAPIService)(&c.common)
 	c.LabelsAPI = (*LabelsAPIService)(&c.common)
 	c.MeAPI = (*MeAPIService)(&c.common)
 	c.MeAPIKeysAPI = (*MeAPIKeysAPIService)(&c.common)
+	c.MetaAPI = (*MetaAPIService)(&c.common)
 	c.NodePoolsAPI = (*NodePoolsAPIService)(&c.common)
 	c.OrgsAPI = (*OrgsAPIService)(&c.common)
 	c.ServersAPI = (*ServersAPIService)(&c.common)
