@@ -1,6 +1,6 @@
 # \MeAPIKeysAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 ## CreateUserAPIKey
 
-> HandlersUserAPIKeyOut CreateUserAPIKey(ctx).Body(body).Execute()
+> HandlersUserAPIKeyOut CreateUserAPIKey(ctx).HandlersCreateUserKeyRequest(handlersCreateUserKeyRequest).Execute()
 
 Create a new user API key
 
@@ -31,11 +31,11 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewHandlersCreateUserKeyRequest() // HandlersCreateUserKeyRequest | Key options
+	handlersCreateUserKeyRequest := *openapiclient.NewHandlersCreateUserKeyRequest() // HandlersCreateUserKeyRequest | Key options
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.MeAPIKeysAPI.CreateUserAPIKey(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.MeAPIKeysAPI.CreateUserAPIKey(context.Background()).HandlersCreateUserKeyRequest(handlersCreateUserKeyRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `MeAPIKeysAPI.CreateUserAPIKey``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -56,7 +56,7 @@ Other parameters are passed through a pointer to a apiCreateUserAPIKeyRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**HandlersCreateUserKeyRequest**](HandlersCreateUserKeyRequest.md) | Key options | 
+ **handlersCreateUserKeyRequest** | [**HandlersCreateUserKeyRequest**](HandlersCreateUserKeyRequest.md) | Key options | 
 
 ### Return type
 

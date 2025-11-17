@@ -1,6 +1,6 @@
 # \AnnotationsAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## CreateAnnotation
 
-> DtoAnnotationResponse CreateAnnotation(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoAnnotationResponse CreateAnnotation(ctx).DtoCreateAnnotationRequest(dtoCreateAnnotationRequest).XOrgID(xOrgID).Execute()
 
 Create annotation (org scoped)
 
@@ -33,12 +33,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateAnnotationRequest() // DtoCreateAnnotationRequest | Annotation payload
+	dtoCreateAnnotationRequest := *openapiclient.NewDtoCreateAnnotationRequest() // DtoCreateAnnotationRequest | Annotation payload
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AnnotationsAPI.CreateAnnotation(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.AnnotationsAPI.CreateAnnotation(context.Background()).DtoCreateAnnotationRequest(dtoCreateAnnotationRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AnnotationsAPI.CreateAnnotation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -59,7 +59,7 @@ Other parameters are passed through a pointer to a apiCreateAnnotationRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateAnnotationRequest**](DtoCreateAnnotationRequest.md) | Annotation payload | 
+ **dtoCreateAnnotationRequest** | [**DtoCreateAnnotationRequest**](DtoCreateAnnotationRequest.md) | Annotation payload | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -82,7 +82,7 @@ Name | Type | Description  | Notes
 
 ## DeleteAnnotation
 
-> string DeleteAnnotation(ctx, id).XOrgID(xOrgID).Execute()
+> DeleteAnnotation(ctx, id).XOrgID(xOrgID).Execute()
 
 Delete annotation (org scoped)
 
@@ -106,13 +106,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AnnotationsAPI.DeleteAnnotation(context.Background(), id).XOrgID(xOrgID).Execute()
+	r, err := apiClient.AnnotationsAPI.DeleteAnnotation(context.Background(), id).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AnnotationsAPI.DeleteAnnotation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteAnnotation`: string
-	fmt.Fprintf(os.Stdout, "Response from `AnnotationsAPI.DeleteAnnotation`: %v\n", resp)
 }
 ```
 
@@ -136,7 +134,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -298,7 +296,7 @@ Name | Type | Description  | Notes
 
 ## UpdateAnnotation
 
-> DtoAnnotationResponse UpdateAnnotation(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> DtoAnnotationResponse UpdateAnnotation(ctx, id).DtoUpdateAnnotationRequest(dtoUpdateAnnotationRequest).XOrgID(xOrgID).Execute()
 
 Update annotation (org scoped)
 
@@ -318,12 +316,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Annotation ID (UUID)
-	body := *openapiclient.NewDtoUpdateAnnotationRequest() // DtoUpdateAnnotationRequest | Fields to update
+	dtoUpdateAnnotationRequest := *openapiclient.NewDtoUpdateAnnotationRequest() // DtoUpdateAnnotationRequest | Fields to update
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AnnotationsAPI.UpdateAnnotation(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.AnnotationsAPI.UpdateAnnotation(context.Background(), id).DtoUpdateAnnotationRequest(dtoUpdateAnnotationRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AnnotationsAPI.UpdateAnnotation``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -349,7 +347,7 @@ Other parameters are passed through a pointer to a apiUpdateAnnotationRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoUpdateAnnotationRequest**](DtoUpdateAnnotationRequest.md) | Fields to update | 
+ **dtoUpdateAnnotationRequest** | [**DtoUpdateAnnotationRequest**](DtoUpdateAnnotationRequest.md) | Fields to update | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type

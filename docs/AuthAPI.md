@@ -1,6 +1,6 @@
 # \AuthAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -213,7 +213,7 @@ No authorization required
 
 ## Logout
 
-> Logout(ctx).Body(body).Execute()
+> Logout(ctx).DtoLogoutRequest(dtoLogoutRequest).Execute()
 
 Revoke refresh token family (logout everywhere)
 
@@ -230,11 +230,11 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoLogoutRequest() // DtoLogoutRequest | Refresh token
+	dtoLogoutRequest := *openapiclient.NewDtoLogoutRequest() // DtoLogoutRequest | Refresh token
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	r, err := apiClient.AuthAPI.Logout(context.Background()).Body(body).Execute()
+	r, err := apiClient.AuthAPI.Logout(context.Background()).DtoLogoutRequest(dtoLogoutRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AuthAPI.Logout``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -253,7 +253,7 @@ Other parameters are passed through a pointer to a apiLogoutRequest struct via t
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoLogoutRequest**](DtoLogoutRequest.md) | Refresh token | 
+ **dtoLogoutRequest** | [**DtoLogoutRequest**](DtoLogoutRequest.md) | Refresh token | 
 
 ### Return type
 
@@ -275,7 +275,7 @@ No authorization required
 
 ## Refresh
 
-> DtoTokenPair Refresh(ctx).Body(body).Execute()
+> DtoTokenPair Refresh(ctx).DtoRefreshRequest(dtoRefreshRequest).Execute()
 
 Rotate refresh token
 
@@ -292,11 +292,11 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoRefreshRequest() // DtoRefreshRequest | Refresh token
+	dtoRefreshRequest := *openapiclient.NewDtoRefreshRequest() // DtoRefreshRequest | Refresh token
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.AuthAPI.Refresh(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.AuthAPI.Refresh(context.Background()).DtoRefreshRequest(dtoRefreshRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `AuthAPI.Refresh``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -317,7 +317,7 @@ Other parameters are passed through a pointer to a apiRefreshRequest struct via 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoRefreshRequest**](DtoRefreshRequest.md) | Refresh token | 
+ **dtoRefreshRequest** | [**DtoRefreshRequest**](DtoRefreshRequest.md) | Refresh token | 
 
 ### Return type
 

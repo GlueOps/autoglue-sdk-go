@@ -1,6 +1,6 @@
 # \TaintsAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## CreateTaint
 
-> DtoTaintResponse CreateTaint(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoTaintResponse CreateTaint(ctx).DtoCreateTaintRequest(dtoCreateTaintRequest).XOrgID(xOrgID).Execute()
 
 Create node taint (org scoped)
 
@@ -33,12 +33,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateTaintRequest() // DtoCreateTaintRequest | Taint payload
+	dtoCreateTaintRequest := *openapiclient.NewDtoCreateTaintRequest() // DtoCreateTaintRequest | Taint payload
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TaintsAPI.CreateTaint(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.TaintsAPI.CreateTaint(context.Background()).DtoCreateTaintRequest(dtoCreateTaintRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TaintsAPI.CreateTaint``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -59,7 +59,7 @@ Other parameters are passed through a pointer to a apiCreateTaintRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateTaintRequest**](DtoCreateTaintRequest.md) | Taint payload | 
+ **dtoCreateTaintRequest** | [**DtoCreateTaintRequest**](DtoCreateTaintRequest.md) | Taint payload | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -82,7 +82,7 @@ Name | Type | Description  | Notes
 
 ## DeleteTaint
 
-> string DeleteTaint(ctx, id).XOrgID(xOrgID).Execute()
+> DeleteTaint(ctx, id).XOrgID(xOrgID).Execute()
 
 Delete taint (org scoped)
 
@@ -106,13 +106,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TaintsAPI.DeleteTaint(context.Background(), id).XOrgID(xOrgID).Execute()
+	r, err := apiClient.TaintsAPI.DeleteTaint(context.Background(), id).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TaintsAPI.DeleteTaint``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteTaint`: string
-	fmt.Fprintf(os.Stdout, "Response from `TaintsAPI.DeleteTaint`: %v\n", resp)
 }
 ```
 
@@ -136,7 +134,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -296,7 +294,7 @@ Name | Type | Description  | Notes
 
 ## UpdateTaint
 
-> DtoTaintResponse UpdateTaint(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> DtoTaintResponse UpdateTaint(ctx, id).DtoUpdateTaintRequest(dtoUpdateTaintRequest).XOrgID(xOrgID).Execute()
 
 Update node taint (org scoped)
 
@@ -316,12 +314,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Node Taint ID (UUID)
-	body := *openapiclient.NewDtoUpdateTaintRequest() // DtoUpdateTaintRequest | Fields to update
+	dtoUpdateTaintRequest := *openapiclient.NewDtoUpdateTaintRequest() // DtoUpdateTaintRequest | Fields to update
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.TaintsAPI.UpdateTaint(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.TaintsAPI.UpdateTaint(context.Background(), id).DtoUpdateTaintRequest(dtoUpdateTaintRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `TaintsAPI.UpdateTaint``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -347,7 +345,7 @@ Other parameters are passed through a pointer to a apiUpdateTaintRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoUpdateTaintRequest**](DtoUpdateTaintRequest.md) | Fields to update | 
+ **dtoUpdateTaintRequest** | [**DtoUpdateTaintRequest**](DtoUpdateTaintRequest.md) | Fields to update | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type

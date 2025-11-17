@@ -1,6 +1,6 @@
 # \ArcherAdminAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## AdminCancelArcherJob
 
-> DtoJob AdminCancelArcherJob(ctx, id).Execute()
+> DtoJob AdminCancelArcherJob(ctx, id).Body(body).Execute()
 
 Cancel an Archer job (admin)
 
@@ -34,10 +34,11 @@ import (
 
 func main() {
 	id := "id_example" // string | Job ID
+	body := map[string]interface{}{ ... } // map[string]interface{} |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArcherAdminAPI.AdminCancelArcherJob(context.Background(), id).Execute()
+	resp, r, err := apiClient.ArcherAdminAPI.AdminCancelArcherJob(context.Background(), id).Body(body).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArcherAdminAPI.AdminCancelArcherJob``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -63,6 +64,7 @@ Other parameters are passed through a pointer to a apiAdminCancelArcherJobReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **body** | **map[string]interface{}** |  | 
 
 ### Return type
 
@@ -74,7 +76,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -84,7 +86,7 @@ Name | Type | Description  | Notes
 
 ## AdminEnqueueArcherJob
 
-> DtoJob AdminEnqueueArcherJob(ctx).Body(body).Execute()
+> DtoJob AdminEnqueueArcherJob(ctx).DtoEnqueueRequest(dtoEnqueueRequest).Execute()
 
 Enqueue a new Archer job (admin)
 
@@ -103,11 +105,11 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoEnqueueRequest() // DtoEnqueueRequest | Job parameters
+	dtoEnqueueRequest := *openapiclient.NewDtoEnqueueRequest() // DtoEnqueueRequest | Job parameters
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArcherAdminAPI.AdminEnqueueArcherJob(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.ArcherAdminAPI.AdminEnqueueArcherJob(context.Background()).DtoEnqueueRequest(dtoEnqueueRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArcherAdminAPI.AdminEnqueueArcherJob``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -128,7 +130,7 @@ Other parameters are passed through a pointer to a apiAdminEnqueueArcherJobReque
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoEnqueueRequest**](DtoEnqueueRequest.md) | Job parameters | 
+ **dtoEnqueueRequest** | [**DtoEnqueueRequest**](DtoEnqueueRequest.md) | Job parameters | 
 
 ### Return type
 
@@ -285,7 +287,7 @@ Other parameters are passed through a pointer to a apiAdminListArcherQueuesReque
 
 ## AdminRetryArcherJob
 
-> DtoJob AdminRetryArcherJob(ctx, id).Execute()
+> DtoJob AdminRetryArcherJob(ctx, id).Body(body).Execute()
 
 Retry a failed/canceled Archer job (admin)
 
@@ -305,10 +307,11 @@ import (
 
 func main() {
 	id := "id_example" // string | Job ID
+	body := map[string]interface{}{ ... } // map[string]interface{} |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ArcherAdminAPI.AdminRetryArcherJob(context.Background(), id).Execute()
+	resp, r, err := apiClient.ArcherAdminAPI.AdminRetryArcherJob(context.Background(), id).Body(body).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ArcherAdminAPI.AdminRetryArcherJob``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -334,6 +337,7 @@ Other parameters are passed through a pointer to a apiAdminRetryArcherJobRequest
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
+ **body** | **map[string]interface{}** |  | 
 
 ### Return type
 
@@ -345,7 +349,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

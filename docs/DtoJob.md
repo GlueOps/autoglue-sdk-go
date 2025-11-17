@@ -9,7 +9,7 @@ Name | Type | Description | Notes
 **Id** | Pointer to **string** |  | [optional] 
 **LastError** | Pointer to **string** |  | [optional] 
 **MaxAttempts** | Pointer to **int32** |  | [optional] 
-**Payload** | Pointer to **map[string]interface{}** |  | [optional] 
+**Payload** | Pointer to **interface{}** |  | [optional] 
 **Queue** | Pointer to **string** |  | [optional] 
 **RunAt** | Pointer to **string** |  | [optional] 
 **Status** | Pointer to [**DtoJobStatus**](DtoJobStatus.md) |  | [optional] 
@@ -162,20 +162,20 @@ HasMaxAttempts returns a boolean if a field has been set.
 
 ### GetPayload
 
-`func (o *DtoJob) GetPayload() map[string]interface{}`
+`func (o *DtoJob) GetPayload() interface{}`
 
 GetPayload returns the Payload field if non-nil, zero value otherwise.
 
 ### GetPayloadOk
 
-`func (o *DtoJob) GetPayloadOk() (*map[string]interface{}, bool)`
+`func (o *DtoJob) GetPayloadOk() (*interface{}, bool)`
 
 GetPayloadOk returns a tuple with the Payload field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetPayload
 
-`func (o *DtoJob) SetPayload(v map[string]interface{})`
+`func (o *DtoJob) SetPayload(v interface{})`
 
 SetPayload sets Payload field to given value.
 
@@ -185,6 +185,16 @@ SetPayload sets Payload field to given value.
 
 HasPayload returns a boolean if a field has been set.
 
+### SetPayloadNil
+
+`func (o *DtoJob) SetPayloadNil(b bool)`
+
+ SetPayloadNil sets the value for Payload to be an explicit nil
+
+### UnsetPayload
+`func (o *DtoJob) UnsetPayload()`
+
+UnsetPayload ensures that no value is present for Payload, not even an explicit nil
 ### GetQueue
 
 `func (o *DtoJob) GetQueue() string`

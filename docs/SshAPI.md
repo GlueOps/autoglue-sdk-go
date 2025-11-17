@@ -1,6 +1,6 @@
 # \SshAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## CreateSSHKey
 
-> DtoSshResponse CreateSSHKey(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoSshResponse CreateSSHKey(ctx).DtoCreateSSHRequest(dtoCreateSSHRequest).XOrgID(xOrgID).Execute()
 
 Create ssh keypair (org scoped)
 
@@ -33,12 +33,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateSSHRequest() // DtoCreateSSHRequest | Key generation options
+	dtoCreateSSHRequest := *openapiclient.NewDtoCreateSSHRequest() // DtoCreateSSHRequest | Key generation options
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.SshAPI.CreateSSHKey(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.SshAPI.CreateSSHKey(context.Background()).DtoCreateSSHRequest(dtoCreateSSHRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SshAPI.CreateSSHKey``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -59,7 +59,7 @@ Other parameters are passed through a pointer to a apiCreateSSHKeyRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateSSHRequest**](DtoCreateSSHRequest.md) | Key generation options | 
+ **dtoCreateSSHRequest** | [**DtoCreateSSHRequest**](DtoCreateSSHRequest.md) | Key generation options | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -82,7 +82,7 @@ Name | Type | Description  | Notes
 
 ## DeleteSSHKey
 
-> string DeleteSSHKey(ctx, id).XOrgID(xOrgID).Execute()
+> DeleteSSHKey(ctx, id).XOrgID(xOrgID).Execute()
 
 Delete ssh keypair (org scoped)
 
@@ -106,13 +106,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.SshAPI.DeleteSSHKey(context.Background(), id).XOrgID(xOrgID).Execute()
+	r, err := apiClient.SshAPI.DeleteSSHKey(context.Background(), id).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `SshAPI.DeleteSSHKey``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteSSHKey`: string
-	fmt.Fprintf(os.Stdout, "Response from `SshAPI.DeleteSSHKey`: %v\n", resp)
 }
 ```
 
@@ -136,7 +134,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -228,7 +226,7 @@ Name | Type | Description  | Notes
 
 ## GetSSHKey
 
-> DtoSshRevealResponse GetSSHKey(ctx, id).XOrgID(xOrgID).Reveal(reveal).Execute()
+> GetSSHKey200Response GetSSHKey(ctx, id).XOrgID(xOrgID).Reveal(reveal).Execute()
 
 Get ssh key by ID (org scoped)
 
@@ -258,7 +256,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `SshAPI.GetSSHKey``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `GetSSHKey`: DtoSshRevealResponse
+	// response from `GetSSHKey`: GetSSHKey200Response
 	fmt.Fprintf(os.Stdout, "Response from `SshAPI.GetSSHKey`: %v\n", resp)
 }
 ```
@@ -284,7 +282,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**DtoSshRevealResponse**](DtoSshRevealResponse.md)
+[**GetSSHKey200Response**](GetSSHKey200Response.md)
 
 ### Authorization
 

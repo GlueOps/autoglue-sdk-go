@@ -4,13 +4,15 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**AppsLoadBalancer** | Pointer to [**DtoLoadBalancerResponse**](DtoLoadBalancerResponse.md) |  | [optional] 
 **BastionServer** | Pointer to [**DtoServerResponse**](DtoServerResponse.md) |  | [optional] 
-**CaptainDomain** | Pointer to **string** |  | [optional] 
+**CaptainDomain** | Pointer to [**DtoDomainResponse**](DtoDomainResponse.md) |  | [optional] 
 **CertificateKey** | Pointer to **string** |  | [optional] 
-**ClusterLoadBalancer** | Pointer to **string** |  | [optional] 
-**ControlLoadBalancer** | Pointer to **string** |  | [optional] 
+**ControlPlaneRecordSet** | Pointer to [**DtoRecordSetResponse**](DtoRecordSetResponse.md) |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
+**GlueopsLoadBalancer** | Pointer to [**DtoLoadBalancerResponse**](DtoLoadBalancerResponse.md) |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
+**LastError** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **NodePools** | Pointer to [**[]DtoNodePoolResponse**](DtoNodePoolResponse.md) |  | [optional] 
 **Provider** | Pointer to **string** |  | [optional] 
@@ -37,6 +39,31 @@ will change when the set of required properties is changed
 NewDtoClusterResponseWithDefaults instantiates a new DtoClusterResponse object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetAppsLoadBalancer
+
+`func (o *DtoClusterResponse) GetAppsLoadBalancer() DtoLoadBalancerResponse`
+
+GetAppsLoadBalancer returns the AppsLoadBalancer field if non-nil, zero value otherwise.
+
+### GetAppsLoadBalancerOk
+
+`func (o *DtoClusterResponse) GetAppsLoadBalancerOk() (*DtoLoadBalancerResponse, bool)`
+
+GetAppsLoadBalancerOk returns a tuple with the AppsLoadBalancer field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAppsLoadBalancer
+
+`func (o *DtoClusterResponse) SetAppsLoadBalancer(v DtoLoadBalancerResponse)`
+
+SetAppsLoadBalancer sets AppsLoadBalancer field to given value.
+
+### HasAppsLoadBalancer
+
+`func (o *DtoClusterResponse) HasAppsLoadBalancer() bool`
+
+HasAppsLoadBalancer returns a boolean if a field has been set.
 
 ### GetBastionServer
 
@@ -65,20 +92,20 @@ HasBastionServer returns a boolean if a field has been set.
 
 ### GetCaptainDomain
 
-`func (o *DtoClusterResponse) GetCaptainDomain() string`
+`func (o *DtoClusterResponse) GetCaptainDomain() DtoDomainResponse`
 
 GetCaptainDomain returns the CaptainDomain field if non-nil, zero value otherwise.
 
 ### GetCaptainDomainOk
 
-`func (o *DtoClusterResponse) GetCaptainDomainOk() (*string, bool)`
+`func (o *DtoClusterResponse) GetCaptainDomainOk() (*DtoDomainResponse, bool)`
 
 GetCaptainDomainOk returns a tuple with the CaptainDomain field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCaptainDomain
 
-`func (o *DtoClusterResponse) SetCaptainDomain(v string)`
+`func (o *DtoClusterResponse) SetCaptainDomain(v DtoDomainResponse)`
 
 SetCaptainDomain sets CaptainDomain field to given value.
 
@@ -113,55 +140,30 @@ SetCertificateKey sets CertificateKey field to given value.
 
 HasCertificateKey returns a boolean if a field has been set.
 
-### GetClusterLoadBalancer
+### GetControlPlaneRecordSet
 
-`func (o *DtoClusterResponse) GetClusterLoadBalancer() string`
+`func (o *DtoClusterResponse) GetControlPlaneRecordSet() DtoRecordSetResponse`
 
-GetClusterLoadBalancer returns the ClusterLoadBalancer field if non-nil, zero value otherwise.
+GetControlPlaneRecordSet returns the ControlPlaneRecordSet field if non-nil, zero value otherwise.
 
-### GetClusterLoadBalancerOk
+### GetControlPlaneRecordSetOk
 
-`func (o *DtoClusterResponse) GetClusterLoadBalancerOk() (*string, bool)`
+`func (o *DtoClusterResponse) GetControlPlaneRecordSetOk() (*DtoRecordSetResponse, bool)`
 
-GetClusterLoadBalancerOk returns a tuple with the ClusterLoadBalancer field if it's non-nil, zero value otherwise
+GetControlPlaneRecordSetOk returns a tuple with the ControlPlaneRecordSet field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetClusterLoadBalancer
+### SetControlPlaneRecordSet
 
-`func (o *DtoClusterResponse) SetClusterLoadBalancer(v string)`
+`func (o *DtoClusterResponse) SetControlPlaneRecordSet(v DtoRecordSetResponse)`
 
-SetClusterLoadBalancer sets ClusterLoadBalancer field to given value.
+SetControlPlaneRecordSet sets ControlPlaneRecordSet field to given value.
 
-### HasClusterLoadBalancer
+### HasControlPlaneRecordSet
 
-`func (o *DtoClusterResponse) HasClusterLoadBalancer() bool`
+`func (o *DtoClusterResponse) HasControlPlaneRecordSet() bool`
 
-HasClusterLoadBalancer returns a boolean if a field has been set.
-
-### GetControlLoadBalancer
-
-`func (o *DtoClusterResponse) GetControlLoadBalancer() string`
-
-GetControlLoadBalancer returns the ControlLoadBalancer field if non-nil, zero value otherwise.
-
-### GetControlLoadBalancerOk
-
-`func (o *DtoClusterResponse) GetControlLoadBalancerOk() (*string, bool)`
-
-GetControlLoadBalancerOk returns a tuple with the ControlLoadBalancer field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetControlLoadBalancer
-
-`func (o *DtoClusterResponse) SetControlLoadBalancer(v string)`
-
-SetControlLoadBalancer sets ControlLoadBalancer field to given value.
-
-### HasControlLoadBalancer
-
-`func (o *DtoClusterResponse) HasControlLoadBalancer() bool`
-
-HasControlLoadBalancer returns a boolean if a field has been set.
+HasControlPlaneRecordSet returns a boolean if a field has been set.
 
 ### GetCreatedAt
 
@@ -188,6 +190,31 @@ SetCreatedAt sets CreatedAt field to given value.
 
 HasCreatedAt returns a boolean if a field has been set.
 
+### GetGlueopsLoadBalancer
+
+`func (o *DtoClusterResponse) GetGlueopsLoadBalancer() DtoLoadBalancerResponse`
+
+GetGlueopsLoadBalancer returns the GlueopsLoadBalancer field if non-nil, zero value otherwise.
+
+### GetGlueopsLoadBalancerOk
+
+`func (o *DtoClusterResponse) GetGlueopsLoadBalancerOk() (*DtoLoadBalancerResponse, bool)`
+
+GetGlueopsLoadBalancerOk returns a tuple with the GlueopsLoadBalancer field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGlueopsLoadBalancer
+
+`func (o *DtoClusterResponse) SetGlueopsLoadBalancer(v DtoLoadBalancerResponse)`
+
+SetGlueopsLoadBalancer sets GlueopsLoadBalancer field to given value.
+
+### HasGlueopsLoadBalancer
+
+`func (o *DtoClusterResponse) HasGlueopsLoadBalancer() bool`
+
+HasGlueopsLoadBalancer returns a boolean if a field has been set.
+
 ### GetId
 
 `func (o *DtoClusterResponse) GetId() string`
@@ -212,6 +239,31 @@ SetId sets Id field to given value.
 `func (o *DtoClusterResponse) HasId() bool`
 
 HasId returns a boolean if a field has been set.
+
+### GetLastError
+
+`func (o *DtoClusterResponse) GetLastError() string`
+
+GetLastError returns the LastError field if non-nil, zero value otherwise.
+
+### GetLastErrorOk
+
+`func (o *DtoClusterResponse) GetLastErrorOk() (*string, bool)`
+
+GetLastErrorOk returns a tuple with the LastError field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLastError
+
+`func (o *DtoClusterResponse) SetLastError(v string)`
+
+SetLastError sets LastError field to given value.
+
+### HasLastError
+
+`func (o *DtoClusterResponse) HasLastError() bool`
+
+HasLastError returns a boolean if a field has been set.
 
 ### GetName
 

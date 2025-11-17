@@ -1,6 +1,6 @@
 # \NodePoolsAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -26,7 +26,7 @@ Method | HTTP request | Description
 
 ## AttachNodePoolAnnotations
 
-> string AttachNodePoolAnnotations(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> string AttachNodePoolAnnotations(ctx, id).DtoAttachAnnotationsRequest(dtoAttachAnnotationsRequest).XOrgID(xOrgID).Execute()
 
 Attach annotation to a node pool (org scoped)
 
@@ -44,12 +44,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Node Group ID (UUID)
-	body := *openapiclient.NewDtoAttachAnnotationsRequest() // DtoAttachAnnotationsRequest | Annotation IDs to attach
+	dtoAttachAnnotationsRequest := *openapiclient.NewDtoAttachAnnotationsRequest() // DtoAttachAnnotationsRequest | Annotation IDs to attach
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolAnnotations(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolAnnotations(context.Background(), id).DtoAttachAnnotationsRequest(dtoAttachAnnotationsRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.AttachNodePoolAnnotations``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -75,7 +75,7 @@ Other parameters are passed through a pointer to a apiAttachNodePoolAnnotationsR
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoAttachAnnotationsRequest**](DtoAttachAnnotationsRequest.md) | Annotation IDs to attach | 
+ **dtoAttachAnnotationsRequest** | [**DtoAttachAnnotationsRequest**](DtoAttachAnnotationsRequest.md) | Annotation IDs to attach | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -98,7 +98,7 @@ Name | Type | Description  | Notes
 
 ## AttachNodePoolLabels
 
-> string AttachNodePoolLabels(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> string AttachNodePoolLabels(ctx, id).DtoAttachLabelsRequest(dtoAttachLabelsRequest).XOrgID(xOrgID).Execute()
 
 Attach labels to a node pool (org scoped)
 
@@ -116,12 +116,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Node Pool ID (UUID)
-	body := *openapiclient.NewDtoAttachLabelsRequest() // DtoAttachLabelsRequest | Label IDs to attach
+	dtoAttachLabelsRequest := *openapiclient.NewDtoAttachLabelsRequest() // DtoAttachLabelsRequest | Label IDs to attach
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolLabels(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolLabels(context.Background(), id).DtoAttachLabelsRequest(dtoAttachLabelsRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.AttachNodePoolLabels``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -147,7 +147,7 @@ Other parameters are passed through a pointer to a apiAttachNodePoolLabelsReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoAttachLabelsRequest**](DtoAttachLabelsRequest.md) | Label IDs to attach | 
+ **dtoAttachLabelsRequest** | [**DtoAttachLabelsRequest**](DtoAttachLabelsRequest.md) | Label IDs to attach | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -170,7 +170,7 @@ Name | Type | Description  | Notes
 
 ## AttachNodePoolServers
 
-> string AttachNodePoolServers(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> string AttachNodePoolServers(ctx, id).DtoAttachServersRequest(dtoAttachServersRequest).XOrgID(xOrgID).Execute()
 
 Attach servers to a node pool (org scoped)
 
@@ -188,12 +188,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Node Pool ID (UUID)
-	body := *openapiclient.NewDtoAttachServersRequest() // DtoAttachServersRequest | Server IDs to attach
+	dtoAttachServersRequest := *openapiclient.NewDtoAttachServersRequest() // DtoAttachServersRequest | Server IDs to attach
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolServers(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolServers(context.Background(), id).DtoAttachServersRequest(dtoAttachServersRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.AttachNodePoolServers``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -219,7 +219,7 @@ Other parameters are passed through a pointer to a apiAttachNodePoolServersReque
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoAttachServersRequest**](DtoAttachServersRequest.md) | Server IDs to attach | 
+ **dtoAttachServersRequest** | [**DtoAttachServersRequest**](DtoAttachServersRequest.md) | Server IDs to attach | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -242,7 +242,7 @@ Name | Type | Description  | Notes
 
 ## AttachNodePoolTaints
 
-> string AttachNodePoolTaints(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> string AttachNodePoolTaints(ctx, id).DtoAttachTaintsRequest(dtoAttachTaintsRequest).XOrgID(xOrgID).Execute()
 
 Attach taints to a node pool (org scoped)
 
@@ -260,12 +260,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Node Pool ID (UUID)
-	body := *openapiclient.NewDtoAttachTaintsRequest() // DtoAttachTaintsRequest | Taint IDs to attach
+	dtoAttachTaintsRequest := *openapiclient.NewDtoAttachTaintsRequest() // DtoAttachTaintsRequest | Taint IDs to attach
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolTaints(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.NodePoolsAPI.AttachNodePoolTaints(context.Background(), id).DtoAttachTaintsRequest(dtoAttachTaintsRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.AttachNodePoolTaints``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -291,7 +291,7 @@ Other parameters are passed through a pointer to a apiAttachNodePoolTaintsReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoAttachTaintsRequest**](DtoAttachTaintsRequest.md) | Taint IDs to attach | 
+ **dtoAttachTaintsRequest** | [**DtoAttachTaintsRequest**](DtoAttachTaintsRequest.md) | Taint IDs to attach | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -314,7 +314,7 @@ Name | Type | Description  | Notes
 
 ## CreateNodePool
 
-> DtoNodePoolResponse CreateNodePool(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoNodePoolResponse CreateNodePool(ctx).DtoCreateNodePoolRequest(dtoCreateNodePoolRequest).XOrgID(xOrgID).Execute()
 
 Create node pool (org scoped)
 
@@ -333,12 +333,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateNodePoolRequest() // DtoCreateNodePoolRequest | NodePool payload
+	dtoCreateNodePoolRequest := *openapiclient.NewDtoCreateNodePoolRequest() // DtoCreateNodePoolRequest | NodePool payload
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.CreateNodePool(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.NodePoolsAPI.CreateNodePool(context.Background()).DtoCreateNodePoolRequest(dtoCreateNodePoolRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.CreateNodePool``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -359,7 +359,7 @@ Other parameters are passed through a pointer to a apiCreateNodePoolRequest stru
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateNodePoolRequest**](DtoCreateNodePoolRequest.md) | NodePool payload | 
+ **dtoCreateNodePoolRequest** | [**DtoCreateNodePoolRequest**](DtoCreateNodePoolRequest.md) | NodePool payload | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -382,7 +382,7 @@ Name | Type | Description  | Notes
 
 ## DeleteNodePool
 
-> string DeleteNodePool(ctx, id).XOrgID(xOrgID).Execute()
+> DeleteNodePool(ctx, id).XOrgID(xOrgID).Execute()
 
 Delete node pool (org scoped)
 
@@ -406,13 +406,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.DeleteNodePool(context.Background(), id).XOrgID(xOrgID).Execute()
+	r, err := apiClient.NodePoolsAPI.DeleteNodePool(context.Background(), id).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.DeleteNodePool``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteNodePool`: string
-	fmt.Fprintf(os.Stdout, "Response from `NodePoolsAPI.DeleteNodePool`: %v\n", resp)
 }
 ```
 
@@ -436,7 +434,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -1166,7 +1164,7 @@ Name | Type | Description  | Notes
 
 ## UpdateNodePool
 
-> DtoNodePoolResponse UpdateNodePool(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> DtoNodePoolResponse UpdateNodePool(ctx, id).DtoUpdateNodePoolRequest(dtoUpdateNodePoolRequest).XOrgID(xOrgID).Execute()
 
 Update node pool (org scoped)
 
@@ -1186,12 +1184,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Node Pool ID (UUID)
-	body := *openapiclient.NewDtoUpdateNodePoolRequest() // DtoUpdateNodePoolRequest | Fields to update
+	dtoUpdateNodePoolRequest := *openapiclient.NewDtoUpdateNodePoolRequest() // DtoUpdateNodePoolRequest | Fields to update
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.NodePoolsAPI.UpdateNodePool(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.NodePoolsAPI.UpdateNodePool(context.Background(), id).DtoUpdateNodePoolRequest(dtoUpdateNodePoolRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `NodePoolsAPI.UpdateNodePool``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -1217,7 +1215,7 @@ Other parameters are passed through a pointer to a apiUpdateNodePoolRequest stru
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoUpdateNodePoolRequest**](DtoUpdateNodePoolRequest.md) | Fields to update | 
+ **dtoUpdateNodePoolRequest** | [**DtoUpdateNodePoolRequest**](DtoUpdateNodePoolRequest.md) | Fields to update | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type

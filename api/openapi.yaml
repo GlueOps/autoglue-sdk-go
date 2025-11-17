@@ -1,12 +1,20 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   contact:
     name: GlueOps
   description: API for managing K3s clusters across cloud providers
   title: AutoGlue API
-  version: "1.0"
+  version: dev
+externalDocs:
+  description: ""
+  url: ""
 servers:
-- url: /api/v1
+- description: Production API
+  url: https://autoglue.onglueops.rocks/api/v1
+- description: Staging API
+  url: https://autoglue.apps.nonprod.earth.onglueops.rocks/api/v1
+- description: Local dev
+  url: http://localhost:8080/api/v1
 paths:
   /.well-known/jwks.json:
     get:
@@ -29,8 +37,10 @@ paths:
       operationId: AdminListArcherJobs
       parameters:
       - description: Filter by status
+        explode: true
         in: query
         name: status
+        required: false
         schema:
           enum:
           - queued
@@ -41,30 +51,43 @@ paths:
           - retrying
           - scheduled
           type: string
+        style: form
       - description: Filter by queue name / worker name
+        explode: true
         in: query
         name: queue
+        required: false
         schema:
           type: string
+        style: form
       - description: Free-text search
+        explode: true
         in: query
         name: q
+        required: false
         schema:
           type: string
+        style: form
       - description: Page number
+        explode: true
         in: query
         name: page
+        required: false
         schema:
           default: 1
           type: integer
+        style: form
       - description: Items per page
+        explode: true
         in: query
         name: page_size
+        required: false
         schema:
           default: 25
           maximum: 100
           minimum: 1
           type: integer
+        style: form
       responses:
         "200":
           content:
@@ -141,7 +164,6 @@ paths:
       summary: Enqueue a new Archer job (admin)
       tags:
       - ArcherAdmin
-      x-codegen-request-body-name: body
   /admin/archer/jobs/{id}/cancel:
     post:
       description: "Set job status to canceled if cancellable. For running jobs, this\
@@ -149,11 +171,18 @@ paths:
       operationId: AdminCancelArcherJob
       parameters:
       - description: Job ID
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         "200":
           content:
@@ -197,11 +226,18 @@ paths:
       operationId: AdminRetryArcherJob
       parameters:
       - description: Job ID
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         "200":
           content:
@@ -282,25 +318,37 @@ paths:
       operationId: ListAnnotations
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Exact key
+        explode: true
         in: query
         name: key
+        required: false
         schema:
           type: string
+        style: form
       - description: Exact value
+        explode: true
         in: query
         name: value
+        required: false
         schema:
           type: string
+        style: form
       - description: key contains (case-insensitive)
+        explode: true
         in: query
         name: q
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -340,10 +388,13 @@ paths:
       operationId: CreateAnnotation
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -389,29 +440,29 @@ paths:
       summary: Create annotation (org scoped)
       tags:
       - Annotations
-      x-codegen-request-body-name: body
   /annotations/{id}:
     delete:
       description: Permanently deletes the annotation.
       operationId: DeleteAnnotation
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Annotation ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content:
-            application/json:
-              schema:
-                type: string
           description: No Content
         "400":
           content:
@@ -450,16 +501,21 @@ paths:
       operationId: GetAnnotation
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Annotation ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -509,16 +565,21 @@ paths:
       operationId: UpdateAnnotation
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Annotation ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -570,7 +631,6 @@ paths:
       summary: Update annotation (org scoped)
       tags:
       - Annotations
-      x-codegen-request-body-name: body
   /auth/logout:
     post:
       operationId: Logout
@@ -583,12 +643,10 @@ paths:
         required: true
       responses:
         "204":
-          content: {}
           description: No Content
       summary: Revoke refresh token family (logout everywhere)
       tags:
       - Auth
-      x-codegen-request-body-name: body
   /auth/refresh:
     post:
       operationId: Refresh
@@ -609,17 +667,18 @@ paths:
       summary: Rotate refresh token
       tags:
       - Auth
-      x-codegen-request-body-name: body
   /auth/{provider}/callback:
     get:
       operationId: AuthCallback
       parameters:
       - description: google|github
+        explode: false
         in: path
         name: provider
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -636,11 +695,13 @@ paths:
       operationId: AuthStart
       parameters:
       - description: google|github
+        explode: false
         in: path
         name: provider
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -658,15 +719,21 @@ paths:
       operationId: ListClusters
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Name contains (case-insensitive)
+        explode: true
         in: query
         name: q
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -702,15 +769,18 @@ paths:
       tags:
       - Clusters
     post:
-      description: "Creates a cluster. If `kubeconfig` is provided, it will be encrypted\
-        \ per-organization and stored securely (never returned)."
+      description: Creates a cluster. Status is managed by the system and starts as
+        `pre_pending` for validation.
       operationId: CreateCluster
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -756,7 +826,1174 @@ paths:
       summary: Create cluster (org scoped)
       tags:
       - Clusters
-      x-codegen-request-body-name: body
+  /clusters/{clusterID}:
+    delete:
+      description: Deletes the cluster. Related resources are cleaned up via DB constraints
+        (e.g. CASCADE).
+      operationId: DeleteCluster
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: deleted
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Delete a cluster (org scoped)
+      tags:
+      - Clusters
+    get:
+      description: "Returns a cluster with all related resources (domain, record set,\
+        \ load balancers, bastion, node pools)."
+      operationId: GetCluster
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Get a single cluster by ID (org scoped)
+      tags:
+      - Clusters
+    patch:
+      description: "Updates the cluster name, provider, and/or region. Status is managed\
+        \ by the system."
+      operationId: UpdateCluster
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.UpdateClusterRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Update basic cluster details (org scoped)
+      tags:
+      - Clusters
+  /clusters/{clusterID}/apps-load-balancer:
+    delete:
+      description: Clears apps_load_balancer_id on the cluster.
+      operationId: DetachAppsLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Detach the apps load balancer from a cluster
+      tags:
+      - Clusters
+    post:
+      description: Sets apps_load_balancer_id on the cluster.
+      operationId: AttachAppsLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.AttachLoadBalancerRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or load balancer not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Attach an apps load balancer to a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/bastion:
+    delete:
+      description: Clears bastion_server_id on the cluster.
+      operationId: DetachBastionServer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Detach the bastion server from a cluster
+      tags:
+      - Clusters
+    post:
+      description: Sets bastion_server_id on the cluster.
+      operationId: AttachBastionServer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.AttachBastionRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or server not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Attach a bastion server to a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/captain-domain:
+    delete:
+      description: Clears captain_domain_id on the cluster. This will likely cause
+        the cluster to become incomplete.
+      operationId: DetachCaptainDomain
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Detach the captain domain from a cluster
+      tags:
+      - Clusters
+    post:
+      description: Sets captain_domain_id on the cluster. Validation of shape happens
+        asynchronously.
+      operationId: AttachCaptainDomain
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.AttachCaptainDomainRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or domain not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Attach a captain domain to a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/control-plane-record-set:
+    delete:
+      description: Clears control_plane_record_set_id on the cluster.
+      operationId: DetachControlPlaneRecordSet
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Detach the control plane record set from a cluster
+      tags:
+      - Clusters
+    post:
+      description: Sets control_plane_record_set_id on the cluster.
+      operationId: AttachControlPlaneRecordSet
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.AttachRecordSetRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or record set not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Attach a control plane record set to a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/glueops-load-balancer:
+    delete:
+      description: Clears glueops_load_balancer_id on the cluster.
+      operationId: DetachGlueOpsLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Detach the GlueOps/control-plane load balancer from a cluster
+      tags:
+      - Clusters
+    post:
+      description: Sets glueops_load_balancer_id on the cluster.
+      operationId: AttachGlueOpsLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.AttachLoadBalancerRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or load balancer not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Attach a GlueOps/control-plane load balancer to a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/kubeconfig:
+    delete:
+      description: "Removes the encrypted kubeconfig, IV, and tag from the cluster\
+        \ record."
+      operationId: ClearClusterKubeconfig
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Clear the kubeconfig for a cluster
+      tags:
+      - Clusters
+    post:
+      description: Stores the kubeconfig encrypted per organization. The kubeconfig
+        is never returned in responses.
+      operationId: SetClusterKubeconfig
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.SetKubeconfigRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Set (or replace) the kubeconfig for a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/node-pools:
+    post:
+      description: Adds an entry in the cluster_node_pools join table.
+      operationId: AttachNodePool
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.AttachNodePoolRequest"
+        description: payload
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or node pool not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Attach a node pool to a cluster
+      tags:
+      - Clusters
+  /clusters/{clusterID}/node-pools/{nodePoolID}:
+    delete:
+      description: Removes an entry from the cluster_node_pools join table.
+      operationId: DetachNodePool
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Cluster ID
+        explode: false
+        in: path
+        name: clusterID
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Node Pool ID
+        explode: false
+        in: path
+        name: nodePoolID
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ClusterResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: bad request
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: cluster or node pool not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Detach a node pool from a cluster
+      tags:
+      - Clusters
   /credentials:
     get:
       description: Returns credential metadata for the current org. Secrets are never
@@ -764,25 +2001,37 @@ paths:
       operationId: ListCredentials
       parameters:
       - description: Organization ID (UUID)
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: "Filter by provider (e.g., aws)"
+        explode: true
         in: query
         name: provider
+        required: false
         schema:
           type: string
+        style: form
       - description: "Filter by kind (e.g., aws_access_key)"
+        explode: true
         in: query
         name: kind
+        required: false
         schema:
           type: string
+        style: form
       - description: Filter by scope kind (provider/service/resource)
+        explode: true
         in: query
         name: scope_kind
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -821,10 +2070,13 @@ paths:
       operationId: CreateCredential
       parameters:
       - description: Organization ID (UUID)
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -864,25 +2116,28 @@ paths:
       summary: Create a credential (encrypts secret)
       tags:
       - Credentials
-      x-codegen-request-body-name: body
   /credentials/{id}:
     delete:
       operationId: DeleteCredential
       parameters:
       - description: Organization ID (UUID)
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Credential ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content: {}
           description: No Content
         "404":
           content:
@@ -901,16 +2156,21 @@ paths:
       operationId: GetCredential
       parameters:
       - description: Organization ID (UUID)
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Credential ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -947,16 +2207,21 @@ paths:
       operationId: UpdateCredential
       parameters:
       - description: Organization ID (UUID)
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Credential ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -990,29 +2255,37 @@ paths:
       summary: Update credential metadata and/or rotate secret
       tags:
       - Credentials
-      x-codegen-request-body-name: body
   /credentials/{id}/reveal:
     post:
       operationId: RevealCredential
       parameters:
       - description: Organization ID (UUID)
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Credential ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
       responses:
         "200":
           content:
             application/json:
               schema:
-                additionalProperties: true
-                type: object
+                additionalProperties: {}
           description: OK
         "403":
           content:
@@ -1033,6 +2306,519 @@ paths:
       summary: Reveal decrypted secret (one-time read)
       tags:
       - Credentials
+  /dns/domains:
+    get:
+      description: "Returns domains for X-Org-ID. Filters: `domain_name`, `status`,\
+        \ `q` (contains)."
+      operationId: ListDomains
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: "Exact domain name (lowercase, no trailing dot)"
+        explode: true
+        in: query
+        name: domain_name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: pending|provisioning|ready|failed
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: Domain contains (case-insensitive)
+        explode: true
+        in: query
+        name: q
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/dto.DomainResponse"
+                type: array
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: List domains (org scoped)
+      tags:
+      - DNS
+    post:
+      description: Creates a domain bound to a Route 53 scoped credential. Archer
+        will backfill ZoneID if omitted.
+      operationId: CreateDomain
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.CreateDomainRequest"
+        description: Domain payload
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.DomainResponse"
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: validation error
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: db error
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Create a domain (org scoped)
+      tags:
+      - DNS
+  /dns/domains/{domain_id}/records:
+    get:
+      description: "Filters: `name`, `type`, `status`."
+      operationId: ListRecordSets
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Domain ID (UUID)
+        explode: false
+        in: path
+        name: domain_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Exact relative name or FQDN (server normalizes)
+        explode: true
+        in: query
+        name: name
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "RR type (A, AAAA, CNAME, TXT, MX, NS, SRV, CAA)"
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: pending|provisioning|ready|failed
+        explode: true
+        in: query
+        name: status
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/dto.RecordSetResponse"
+                type: array
+          description: OK
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: domain not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: List record sets for a domain
+      tags:
+      - DNS
+    post:
+      operationId: CreateRecordSet
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Domain ID (UUID)
+        explode: false
+        in: path
+        name: domain_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.CreateRecordSetRequest"
+        description: Record set payload
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.RecordSetResponse"
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: validation error
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: domain not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Create a record set (pending; Archer will UPSERT to Route 53)
+      tags:
+      - DNS
+  /dns/domains/{id}:
+    delete:
+      operationId: DeleteDomain
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Domain ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Delete a domain
+      tags:
+      - DNS
+    get:
+      operationId: GetDomain
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Domain ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.DomainResponse"
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Get a domain (org scoped)
+      tags:
+      - DNS
+    patch:
+      operationId: UpdateDomain
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Domain ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.UpdateDomainRequest"
+        description: Fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.DomainResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: validation error
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Update a domain (org scoped)
+      tags:
+      - DNS
+  /dns/records/{id}:
+    delete:
+      operationId: DeleteRecordSet
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Record Set ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Delete a record set (API removes row; worker can optionally handle
+        external deletion policy)
+      tags:
+      - DNS
+    patch:
+      operationId: UpdateRecordSet
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Record Set ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.UpdateRecordSetRequest"
+        description: Fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.RecordSetResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: validation error
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Update a record set (flips to pending for reconciliation)
+      tags:
+      - DNS
   /healthz:
     get:
       description: Returns 200 OK when the service is up
@@ -1055,25 +2841,37 @@ paths:
       operationId: ListLabels
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Exact key
+        explode: true
         in: query
         name: key
+        required: false
         schema:
           type: string
+        style: form
       - description: Exact value
+        explode: true
         in: query
         name: value
+        required: false
         schema:
           type: string
+        style: form
       - description: Key contains (case-insensitive)
+        explode: true
         in: query
         name: q
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -1113,10 +2911,13 @@ paths:
       operationId: CreateLabel
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1162,29 +2963,29 @@ paths:
       summary: Create label (org scoped)
       tags:
       - Labels
-      x-codegen-request-body-name: body
   /labels/{id}:
     delete:
       description: Permanently deletes the label.
       operationId: DeleteLabel
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Label ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content:
-            application/json:
-              schema:
-                type: string
           description: No Content
         "400":
           content:
@@ -1222,16 +3023,21 @@ paths:
       operationId: GetLabel
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Label ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -1281,16 +3087,21 @@ paths:
       operationId: UpdateLabel
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Label ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1342,7 +3153,257 @@ paths:
       summary: Update label (org scoped)
       tags:
       - Labels
-      x-codegen-request-body-name: body
+  /load-balancers:
+    get:
+      description: Returns load balancers for the organization in X-Org-ID.
+      operationId: ListLoadBalancers
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/dto.LoadBalancerResponse"
+                type: array
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: failed to list clusters
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: List load balancers (org scoped)
+      tags:
+      - LoadBalancers
+    post:
+      operationId: CreateLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.CreateLoadBalancerRequest"
+        description: Record set payload
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.LoadBalancerResponse"
+          description: Created
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: validation error
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: domain not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Create a load balancer
+      tags:
+      - LoadBalancers
+  /load-balancers/{id}:
+    delete:
+      operationId: DeleteLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Load Balancer ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: No Content
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Delete a load balancer
+      tags:
+      - LoadBalancers
+    get:
+      description: Returns load balancer for the organization in X-Org-ID.
+      operationId: GetLoadBalancers
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: LoadBalancer ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/dto.LoadBalancerResponse"
+                type: array
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: failed to list clusters
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Get a load balancer (org scoped)
+      tags:
+      - LoadBalancers
+    patch:
+      operationId: UpdateLoadBalancer
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Load Balancer ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dto.UpdateLoadBalancerRequest"
+        description: Fields to update
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.LoadBalancerResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: validation error
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Update a load balancer (org scoped)
+      tags:
+      - LoadBalancers
   /me:
     get:
       operationId: GetMe
@@ -1381,7 +3442,6 @@ paths:
       summary: Update current user profile
       tags:
       - Me
-      x-codegen-request-body-name: body
   /me/api-keys:
     get:
       operationId: ListUserAPIKeys
@@ -1424,20 +3484,20 @@ paths:
       summary: Create a new user API key
       tags:
       - MeAPIKeys
-      x-codegen-request-body-name: body
   /me/api-keys/{id}:
     delete:
       operationId: DeleteUserAPIKey
       parameters:
       - description: Key ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content: {}
           description: No Content
       security:
       - BearerAuth: []
@@ -1450,15 +3510,21 @@ paths:
       operationId: ListNodePools
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Name contains (case-insensitive)
+        explode: true
         in: query
         name: q
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -1498,10 +3564,13 @@ paths:
       operationId: CreateNodePool
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1547,29 +3616,29 @@ paths:
       summary: Create node pool (org scoped)
       tags:
       - NodePools
-      x-codegen-request-body-name: body
   /node-pools/{id}:
     delete:
       description: Permanently deletes the node pool.
       operationId: DeleteNodePool
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content:
-            application/json:
-              schema:
-                type: string
           description: No Content
         "400":
           content:
@@ -1607,16 +3676,21 @@ paths:
       operationId: GetNodePool
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -1666,16 +3740,21 @@ paths:
       operationId: UpdateNodePool
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1727,22 +3806,26 @@ paths:
       summary: Update node pool (org scoped)
       tags:
       - NodePools
-      x-codegen-request-body-name: body
   /node-pools/{id}/annotations:
     get:
       operationId: ListNodePoolAnnotations
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -1793,16 +3876,21 @@ paths:
       operationId: AttachNodePoolAnnotations
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Group ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -1854,28 +3942,34 @@ paths:
       summary: Attach annotation to a node pool (org scoped)
       tags:
       - NodePools
-      x-codegen-request-body-name: body
   /node-pools/{id}/annotations/{annotationId}:
     delete:
       operationId: DetachNodePoolAnnotation
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Annotation ID (UUID)
+        explode: false
         in: path
         name: annotationId
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
           content:
@@ -1925,16 +4019,21 @@ paths:
       operationId: ListNodePoolLabels
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Label Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -1985,16 +4084,21 @@ paths:
       operationId: AttachNodePoolLabels
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2046,28 +4150,34 @@ paths:
       summary: Attach labels to a node pool (org scoped)
       tags:
       - NodePools
-      x-codegen-request-body-name: body
   /node-pools/{id}/labels/{labelId}:
     delete:
       operationId: DetachNodePoolLabel
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Label ID (UUID)
+        explode: false
         in: path
         name: labelId
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
           content:
@@ -2117,16 +4227,21 @@ paths:
       operationId: ListNodePoolServers
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -2177,16 +4292,21 @@ paths:
       operationId: AttachNodePoolServers
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2238,28 +4358,34 @@ paths:
       summary: Attach servers to a node pool (org scoped)
       tags:
       - NodePools
-      x-codegen-request-body-name: body
   /node-pools/{id}/servers/{serverId}:
     delete:
       operationId: DetachNodePoolServer
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Server ID (UUID)
+        explode: false
         in: path
         name: serverId
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
           content:
@@ -2309,16 +4435,21 @@ paths:
       operationId: ListNodePoolTaints
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -2369,16 +4500,21 @@ paths:
       operationId: AttachNodePoolTaints
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2430,28 +4566,34 @@ paths:
       summary: Attach taints to a node pool (org scoped)
       tags:
       - NodePools
-      x-codegen-request-body-name: body
   /node-pools/{id}/taints/{taintId}:
     delete:
       operationId: DetachNodePoolTaint
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Pool ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Taint ID (UUID)
+        explode: false
         in: path
         name: taintId
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
           content:
@@ -2558,20 +4700,20 @@ paths:
       summary: Create organization
       tags:
       - Orgs
-      x-codegen-request-body-name: body
   /orgs/{id}:
     delete:
       operationId: deleteOrg
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content: {}
           description: Deleted
         "401":
           content:
@@ -2594,11 +4736,13 @@ paths:
       operationId: getOrg
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -2627,11 +4771,13 @@ paths:
       operationId: updateOrg
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2663,17 +4809,18 @@ paths:
       summary: Update organization (owner/admin)
       tags:
       - Orgs
-      x-codegen-request-body-name: body
   /orgs/{id}/api-keys:
     get:
       operationId: listOrgKeys
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -2698,11 +4845,13 @@ paths:
       operationId: createOrgKey
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2728,26 +4877,28 @@ paths:
       summary: Create org key/secret pair (owner/admin)
       tags:
       - Orgs
-      x-codegen-request-body-name: body
   /orgs/{id}/api-keys/{key_id}:
     delete:
       operationId: deleteOrgKey
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Key ID (UUID)
+        explode: false
         in: path
         name: key_id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content: {}
           description: Deleted
         "401":
           content:
@@ -2765,11 +4916,13 @@ paths:
       operationId: listMembers
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -2794,11 +4947,13 @@ paths:
       operationId: addOrUpdateMember
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2824,26 +4979,28 @@ paths:
       summary: Add or update a member (owner/admin)
       tags:
       - Orgs
-      x-codegen-request-body-name: body
   /orgs/{id}/members/{user_id}:
     delete:
       operationId: removeMember
       parameters:
       - description: Org ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: User ID (UUID)
+        explode: false
         in: path
         name: user_id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content: {}
           description: Removed
         "401":
           content:
@@ -2863,20 +5020,29 @@ paths:
       operationId: ListServers
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Filter by status (pending|provisioning|ready|failed)
+        explode: true
         in: query
         name: status
+        required: false
         schema:
           type: string
+        style: form
       - description: Filter by role
+        explode: true
         in: query
         name: role
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -2917,10 +5083,13 @@ paths:
       operationId: CreateServer
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -2966,29 +5135,29 @@ paths:
       summary: Create server (org scoped)
       tags:
       - Servers
-      x-codegen-request-body-name: body
   /servers/{id}:
     delete:
       description: Permanently deletes the server.
       operationId: DeleteServer
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Server ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content:
-            application/json:
-              schema:
-                type: string
           description: No Content
         "400":
           content:
@@ -3026,16 +5195,21 @@ paths:
       operationId: GetServer
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Server ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -3085,16 +5259,21 @@ paths:
       operationId: UpdateServer
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Server ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -3146,17 +5325,90 @@ paths:
       summary: Update server (org scoped)
       tags:
       - Servers
-      x-codegen-request-body-name: body
+  /servers/{id}/reset-hostkey:
+    post:
+      description: Clears the stored SSH host key for this server. The next SSH connection
+        will re-learn the host key (trust-on-first-use).
+      operationId: ResetServerHostKey
+      parameters:
+      - description: Organization UUID
+        explode: false
+        in: header
+        name: X-Org-ID
+        required: false
+        schema:
+          type: string
+        style: simple
+      - description: Server ID (UUID)
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/dto.ServerResponse"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: invalid id
+        "401":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: organization required
+        "404":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: not found
+        "500":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: reset failed
+      security:
+      - BearerAuth: []
+      - OrgKeyAuth: []
+      - OrgSecretAuth: []
+      summary: Reset SSH host key (org scoped)
+      tags:
+      - Servers
   /ssh:
     get:
       description: Returns ssh keys for the organization in X-Org-ID.
       operationId: ListPublicSshKeys
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -3198,10 +5450,13 @@ paths:
       operationId: CreateSSHKey
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -3247,29 +5502,29 @@ paths:
       summary: Create ssh keypair (org scoped)
       tags:
       - Ssh
-      x-codegen-request-body-name: body
   /ssh/{id}:
     delete:
       description: Permanently deletes a keypair.
       operationId: DeleteSSHKey
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: SSH Key ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content:
-            application/json:
-              schema:
-                type: string
           description: No Content
         "400":
           content:
@@ -3308,27 +5563,35 @@ paths:
       operationId: GetSSHKey
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: SSH Key ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Reveal private key PEM
+        explode: true
         in: query
         name: reveal
+        required: false
         schema:
           type: boolean
+        style: form
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/dto.SshRevealResponse"
+                $ref: "#/components/schemas/GetSSHKey_200_response"
           description: When reveal=true
         "400":
           content:
@@ -3374,18 +5637,23 @@ paths:
       operationId: DownloadSSHKey
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
         required: true
         schema:
           type: string
+        style: simple
       - description: SSH Key ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       - description: Which part to download
+        explode: true
         in: query
         name: part
         required: true
@@ -3395,6 +5663,7 @@ paths:
           - private
           - both
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -3447,25 +5716,37 @@ paths:
       operationId: ListTaints
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Exact key
+        explode: true
         in: query
         name: key
+        required: false
         schema:
           type: string
+        style: form
       - description: Exact value
+        explode: true
         in: query
         name: value
+        required: false
         schema:
           type: string
+        style: form
       - description: key contains (case-insensitive)
+        explode: true
         in: query
         name: q
+        required: false
         schema:
           type: string
+        style: form
       responses:
         "200":
           content:
@@ -3505,10 +5786,13 @@ paths:
       operationId: CreateTaint
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -3554,29 +5838,29 @@ paths:
       summary: Create node taint (org scoped)
       tags:
       - Taints
-      x-codegen-request-body-name: body
   /taints/{id}:
     delete:
       description: Permanently deletes the taint.
       operationId: DeleteTaint
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Taint ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "204":
-          content:
-            application/json:
-              schema:
-                type: string
           description: No Content
         "400":
           content:
@@ -3613,16 +5897,21 @@ paths:
       operationId: GetTaint
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Taint ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       responses:
         "200":
           content:
@@ -3672,16 +5961,21 @@ paths:
       operationId: UpdateTaint
       parameters:
       - description: Organization UUID
+        explode: false
         in: header
         name: X-Org-ID
+        required: false
         schema:
           type: string
+        style: simple
       - description: Node Taint ID (UUID)
+        explode: false
         in: path
         name: id
         required: true
         schema:
           type: string
+        style: simple
       requestBody:
         content:
           application/json:
@@ -3733,7 +6027,6 @@ paths:
       summary: Update node taint (org scoped)
       tags:
       - Taints
-      x-codegen-request-body-name: body
   /version:
     get:
       description: Returns build/runtime metadata for the running service.
@@ -3771,35 +6064,54 @@ components:
           type: string
         value:
           type: string
-      type: object
     dto.AttachAnnotationsRequest:
       properties:
         annotation_ids:
           items:
             type: string
           type: array
-      type: object
+          uniqueItems: false
+    dto.AttachBastionRequest:
+      properties:
+        server_id:
+          type: string
+    dto.AttachCaptainDomainRequest:
+      properties:
+        domain_id:
+          type: string
     dto.AttachLabelsRequest:
       properties:
         label_ids:
           items:
             type: string
           type: array
-      type: object
+          uniqueItems: false
+    dto.AttachLoadBalancerRequest:
+      properties:
+        load_balancer_id:
+          type: string
+    dto.AttachNodePoolRequest:
+      properties:
+        node_pool_id:
+          type: string
+    dto.AttachRecordSetRequest:
+      properties:
+        record_set_id:
+          type: string
     dto.AttachServersRequest:
       properties:
         server_ids:
           items:
             type: string
           type: array
-      type: object
+          uniqueItems: false
     dto.AttachTaintsRequest:
       properties:
         taint_ids:
           items:
             type: string
           type: array
-      type: object
+          uniqueItems: false
     dto.AuthStartResponse:
       example:
         auth_url: https://accounts.google.com/o/oauth2/v2/auth?client_id=...
@@ -3807,7 +6119,6 @@ components:
         auth_url:
           example: https://accounts.google.com/o/oauth2/v2/auth?client_id=...
           type: string
-      type: object
     dto.ClusterResponse:
       example:
         bastion_server:
@@ -3823,10 +6134,36 @@ components:
           ssh_user: ssh_user
           status: pending|provisioning|ready|failed
         certificate_key: certificate_key
-        cluster_load_balancer: cluster_load_balancer
         created_at: created_at
-        captain_domain: captain_domain
+        glueops_load_balancer:
+          public_ip_address: public_ip_address
+          updated_at: updated_at
+          kind: kind
+          organization_id: organization_id
+          name: name
+          created_at: created_at
+          private_ip_address: private_ip_address
+          id: id
+        captain_domain:
+          zone_id: zone_id
+          domain_name: domain_name
+          updated_at: updated_at
+          organization_id: organization_id
+          created_at: created_at
+          id: id
+          last_error: last_error
+          credential_id: credential_id
+          status: status
         updated_at: updated_at
+        apps_load_balancer:
+          public_ip_address: public_ip_address
+          updated_at: updated_at
+          kind: kind
+          organization_id: organization_id
+          name: name
+          created_at: created_at
+          private_ip_address: private_ip_address
+          id: id
         provider: provider
         random_token: random_token
         name: name
@@ -3971,24 +6308,41 @@ components:
             id: id
             value: value
             key: key
-        control_load_balancer: control_load_balancer
         id: id
+        last_error: last_error
         region: region
+        control_plane_record_set:
+          domain_id: domain_id
+          owner: owner
+          updated_at: updated_at
+          values: "{}"
+          fingerprint: fingerprint
+          name: name
+          created_at: created_at
+          id: id
+          last_error: last_error
+          type: type
+          ttl: 0
+          status: status
         status: status
       properties:
+        apps_load_balancer:
+          $ref: "#/components/schemas/dto.LoadBalancerResponse"
         bastion_server:
           $ref: "#/components/schemas/dto.ServerResponse"
         captain_domain:
-          type: string
+          $ref: "#/components/schemas/dto.DomainResponse"
         certificate_key:
           type: string
-        cluster_load_balancer:
-          type: string
-        control_load_balancer:
-          type: string
+        control_plane_record_set:
+          $ref: "#/components/schemas/dto.RecordSetResponse"
         created_at:
           type: string
+        glueops_load_balancer:
+          $ref: "#/components/schemas/dto.LoadBalancerResponse"
         id:
+          type: string
+        last_error:
           type: string
         name:
           type: string
@@ -3996,6 +6350,7 @@ components:
           items:
             $ref: "#/components/schemas/dto.NodePoolResponse"
           type: array
+          uniqueItems: false
         provider:
           type: string
         random_token:
@@ -4006,31 +6361,20 @@ components:
           type: string
         updated_at:
           type: string
-      type: object
     dto.CreateAnnotationRequest:
       properties:
         key:
           type: string
         value:
           type: string
-      type: object
     dto.CreateClusterRequest:
       properties:
-        captain_domain:
-          type: string
-        cluster_load_balancer:
-          type: string
-        control_load_balancer:
-          type: string
         name:
           type: string
         provider:
           type: string
         region:
           type: string
-        status:
-          type: string
-      type: object
     dto.CreateCredentialRequest:
       properties:
         account_id:
@@ -4060,7 +6404,6 @@ components:
           type: integer
         scope:
           description: "{\"service\":\"route53\"} or {\"arn\":\"...\"}"
-          properties: {}
           type: object
         scope_kind:
           enum:
@@ -4074,7 +6417,6 @@ components:
           type: integer
         secret:
           description: encrypted later
-          properties: {}
           type: object
       required:
       - kind
@@ -4084,14 +6426,41 @@ components:
       - scope_kind
       - scope_version
       - secret
-      type: object
+    dto.CreateDomainRequest:
+      properties:
+        credential_id:
+          type: string
+        domain_name:
+          type: string
+        zone_id:
+          maxLength: 128
+          type: string
+      required:
+      - credential_id
+      - domain_name
     dto.CreateLabelRequest:
       properties:
         key:
           type: string
         value:
           type: string
-      type: object
+    dto.CreateLoadBalancerRequest:
+      properties:
+        kind:
+          enum:
+          - glueops
+          - public
+          example: public
+          type: string
+        name:
+          example: glueops
+          type: string
+        private_ip_address:
+          example: 192.168.0.2
+          type: string
+        public_ip_address:
+          example: 8.8.8.8
+          type: string
     dto.CreateNodePoolRequest:
       properties:
         name:
@@ -4101,7 +6470,28 @@ components:
           - master
           - worker
           type: string
-      type: object
+    dto.CreateRecordSetRequest:
+      properties:
+        name:
+          description: |-
+            Name relative to domain ("endpoint") OR FQDN ("endpoint.example.com").
+            Server normalizes to relative.
+          maxLength: 253
+          type: string
+        ttl:
+          maximum: 86400
+          minimum: 1
+          type: integer
+        type:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
+      required:
+      - name
+      - type
     dto.CreateSSHRequest:
       properties:
         bits:
@@ -4115,7 +6505,6 @@ components:
         type:
           description: '"rsa" (default) or "ed25519"'
           type: string
-      type: object
     dto.CreateServerRequest:
       properties:
         hostname:
@@ -4143,7 +6532,6 @@ components:
           - failed
           example: pending|provisioning|ready|failed
           type: string
-      type: object
     dto.CreateTaintRequest:
       properties:
         effect:
@@ -4152,7 +6540,6 @@ components:
           type: string
         value:
           type: string
-      type: object
     dto.CredentialOut:
       example:
         schema_version: 0
@@ -4185,7 +6572,6 @@ components:
         schema_version:
           type: integer
         scope:
-          properties: {}
           type: object
         scope_kind:
           type: string
@@ -4193,11 +6579,39 @@ components:
           type: integer
         updated_at:
           type: string
-      type: object
+    dto.DomainResponse:
+      example:
+        zone_id: zone_id
+        domain_name: domain_name
+        updated_at: updated_at
+        organization_id: organization_id
+        created_at: created_at
+        id: id
+        last_error: last_error
+        credential_id: credential_id
+        status: status
+      properties:
+        created_at:
+          type: string
+        credential_id:
+          type: string
+        domain_name:
+          type: string
+        id:
+          type: string
+        last_error:
+          type: string
+        organization_id:
+          type: string
+        status:
+          type: string
+        updated_at:
+          type: string
+        zone_id:
+          type: string
     dto.EnqueueRequest:
       properties:
         payload:
-          properties: {}
           type: object
         queue:
           example: default
@@ -4208,7 +6622,6 @@ components:
         type:
           example: email.send
           type: string
-      type: object
     dto.JWK:
       example:
         kty: RSA
@@ -4238,7 +6651,6 @@ components:
           type: string
         x:
           type: string
-      type: object
     dto.JWKS:
       example:
         keys:
@@ -4261,11 +6673,11 @@ components:
           items:
             $ref: "#/components/schemas/dto.JWK"
           type: array
-      type: object
+          uniqueItems: false
     dto.Job:
       example:
         updated_at: 2025-11-04T09:30:00Z
-        payload: "{}"
+        payload: ""
         max_attempts: 3
         created_at: 2025-11-04T09:30:00Z
         id: 01HF7SZK8Z8WG1M3J7S2Z8M2N6
@@ -4291,8 +6703,7 @@ components:
         max_attempts:
           example: 3
           type: integer
-        payload:
-          type: object
+        payload: {}
         queue:
           example: default
           type: string
@@ -4300,26 +6711,17 @@ components:
           example: 2025-11-04T09:30:00Z
           type: string
         status:
-          allOf:
-          - $ref: "#/components/schemas/dto.JobStatus"
-          example: queued
-          type: object
+          $ref: "#/components/schemas/dto.JobStatus"
         type:
           example: email.send
           type: string
         updated_at:
           example: 2025-11-04T09:30:00Z
           type: string
-      type: object
     dto.JobStatus:
       enum:
-      - queued
-      - running
-      - succeeded
-      - failed
-      - canceled
-      - retrying
-      - scheduled
+      - queued|running|succeeded|failed|canceled|retrying|scheduled
+      example: queued
       type: string
       x-enum-varnames:
       - StatusQueued
@@ -4350,13 +6752,38 @@ components:
           type: string
         value:
           type: string
-      type: object
+    dto.LoadBalancerResponse:
+      example:
+        public_ip_address: public_ip_address
+        updated_at: updated_at
+        kind: kind
+        organization_id: organization_id
+        name: name
+        created_at: created_at
+        private_ip_address: private_ip_address
+        id: id
+      properties:
+        created_at:
+          type: string
+        id:
+          type: string
+        kind:
+          type: string
+        name:
+          type: string
+        organization_id:
+          type: string
+        private_ip_address:
+          type: string
+        public_ip_address:
+          type: string
+        updated_at:
+          type: string
     dto.LogoutRequest:
       properties:
         refresh_token:
           example: m0l9o8rT3t0V8d3eFf...
           type: string
-      type: object
     dto.NodePoolResponse:
       example:
         role: master
@@ -4434,6 +6861,7 @@ components:
           items:
             $ref: "#/components/schemas/dto.AnnotationResponse"
           type: array
+          uniqueItems: false
         created_at:
           type: string
         id:
@@ -4442,6 +6870,7 @@ components:
           items:
             $ref: "#/components/schemas/dto.LabelResponse"
           type: array
+          uniqueItems: false
         name:
           type: string
         organization_id:
@@ -4455,20 +6884,21 @@ components:
           items:
             $ref: "#/components/schemas/dto.ServerResponse"
           type: array
+          uniqueItems: false
         taints:
           items:
             $ref: "#/components/schemas/dto.TaintResponse"
           type: array
+          uniqueItems: false
         updated_at:
           type: string
-      type: object
     dto.PageJob:
       example:
         total: 120
         page: 1
         items:
         - updated_at: 2025-11-04T09:30:00Z
-          payload: "{}"
+          payload: ""
           max_attempts: 3
           created_at: 2025-11-04T09:30:00Z
           id: 01HF7SZK8Z8WG1M3J7S2Z8M2N6
@@ -4479,7 +6909,7 @@ components:
           attempts: 0
           status: queued
         - updated_at: 2025-11-04T09:30:00Z
-          payload: "{}"
+          payload: ""
           max_attempts: 3
           created_at: 2025-11-04T09:30:00Z
           id: 01HF7SZK8Z8WG1M3J7S2Z8M2N6
@@ -4495,6 +6925,7 @@ components:
           items:
             $ref: "#/components/schemas/dto.Job"
           type: array
+          uniqueItems: false
         page:
           example: 1
           type: integer
@@ -4504,7 +6935,6 @@ components:
         total:
           example: 120
           type: integer
-      type: object
     dto.QueueInfo:
       example:
         running: 3
@@ -4528,13 +6958,51 @@ components:
         scheduled:
           example: 7
           type: integer
-      type: object
+    dto.RecordSetResponse:
+      example:
+        domain_id: domain_id
+        owner: owner
+        updated_at: updated_at
+        values: "{}"
+        fingerprint: fingerprint
+        name: name
+        created_at: created_at
+        id: id
+        last_error: last_error
+        type: type
+        ttl: 0
+        status: status
+      properties:
+        created_at:
+          type: string
+        domain_id:
+          type: string
+        fingerprint:
+          type: string
+        id:
+          type: string
+        last_error:
+          type: string
+        name:
+          type: string
+        owner:
+          type: string
+        status:
+          type: string
+        ttl:
+          type: integer
+        type:
+          type: string
+        updated_at:
+          type: string
+        values:
+          description: "[]string JSON"
+          type: object
     dto.RefreshRequest:
       properties:
         refresh_token:
           example: m0l9o8rT3t0V8d3eFf...
           type: string
-      type: object
     dto.ServerResponse:
       example:
         hostname: hostname
@@ -4582,7 +7050,10 @@ components:
           type: string
         updated_at:
           type: string
-      type: object
+    dto.SetKubeconfigRequest:
+      properties:
+        kubeconfig:
+          type: string
     dto.SshResponse:
       example:
         public_key: public_key
@@ -4607,17 +7078,7 @@ components:
           type: string
         updated_at:
           type: string
-      type: object
     dto.SshRevealResponse:
-      example:
-        public_key: public_key
-        updated_at: updated_at
-        organization_id: organization_id
-        fingerprint: fingerprint
-        name: name
-        created_at: created_at
-        private_key: private_key
-        id: id
       properties:
         created_at:
           type: string
@@ -4635,7 +7096,6 @@ components:
           type: string
         updated_at:
           type: string
-      type: object
     dto.TaintResponse:
       example:
         updated_at: updated_at
@@ -4660,7 +7120,6 @@ components:
           type: string
         value:
           type: string
-      type: object
     dto.TokenPair:
       example:
         access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ij...
@@ -4680,14 +7139,20 @@ components:
         token_type:
           example: Bearer
           type: string
-      type: object
     dto.UpdateAnnotationRequest:
       properties:
         key:
           type: string
         value:
           type: string
-      type: object
+    dto.UpdateClusterRequest:
+      properties:
+        name:
+          type: string
+        provider:
+          type: string
+        region:
+          type: string
     dto.UpdateCredentialRequest:
       properties:
         account_id:
@@ -4697,7 +7162,6 @@ components:
         region:
           type: string
         scope:
-          properties: {}
           type: object
         scope_kind:
           type: string
@@ -4705,16 +7169,46 @@ components:
           type: integer
         secret:
           description: set if rotating
-          properties: {}
           type: object
-      type: object
+    dto.UpdateDomainRequest:
+      properties:
+        credential_id:
+          type: string
+        domain_name:
+          type: string
+        status:
+          enum:
+          - pending
+          - provisioning
+          - ready
+          - failed
+          type: string
+        zone_id:
+          maxLength: 128
+          type: string
     dto.UpdateLabelRequest:
       properties:
         key:
           type: string
         value:
           type: string
-      type: object
+    dto.UpdateLoadBalancerRequest:
+      properties:
+        kind:
+          enum:
+          - glueops
+          - public
+          example: public
+          type: string
+        name:
+          example: glue
+          type: string
+        private_ip_address:
+          example: 192.168.0.2
+          type: string
+        public_ip_address:
+          example: 8.8.8.8
+          type: string
     dto.UpdateNodePoolRequest:
       properties:
         name:
@@ -4724,7 +7218,30 @@ components:
           - master
           - worker
           type: string
-      type: object
+    dto.UpdateRecordSetRequest:
+      properties:
+        name:
+          description: Any change flips status back to pending (worker will UPSERT)
+          maxLength: 253
+          type: string
+        status:
+          enum:
+          - pending
+          - provisioning
+          - ready
+          - failed
+          type: string
+        ttl:
+          maximum: 86400
+          minimum: 1
+          type: integer
+        type:
+          type: string
+        values:
+          items:
+            type: string
+          type: array
+          uniqueItems: false
     dto.UpdateServerRequest:
       properties:
         hostname:
@@ -4752,7 +7269,6 @@ components:
           - failed
           example: pending|provisioning|ready|failed
           type: string
-      type: object
     dto.UpdateTaintRequest:
       properties:
         effect:
@@ -4761,7 +7277,6 @@ components:
           type: string
         value:
           type: string
-      type: object
     handlers.HealthStatus:
       example:
         status: ok
@@ -4769,7 +7284,6 @@ components:
         status:
           example: ok
           type: string
-      type: object
     handlers.VersionResponse:
       example:
         goArch: amd64
@@ -4817,7 +7331,6 @@ components:
         version:
           example: 1.4.2
           type: string
-      type: object
     handlers.createUserKeyRequest:
       properties:
         expires_in_hours:
@@ -4825,7 +7338,6 @@ components:
           type: integer
         name:
           type: string
-      type: object
     handlers.meResponse:
       example:
         emails:
@@ -4892,6 +7404,7 @@ components:
           items:
             $ref: "#/components/schemas/models.UserEmail"
           type: array
+          uniqueItems: false
         id:
           description: "example: 3fa85f64-5717-4562-b3fc-2c963f66afa6"
           format: uuid
@@ -4904,12 +7417,12 @@ components:
           items:
             $ref: "#/components/schemas/models.Organization"
           type: array
+          uniqueItems: false
         primary_email:
           type: string
         updated_at:
           format: date-time
           type: string
-      type: object
     handlers.memberOut:
       example:
         role: role
@@ -4924,7 +7437,6 @@ components:
         user_id:
           format: uuid
           type: string
-      type: object
     handlers.memberUpsertReq:
       properties:
         role:
@@ -4933,7 +7445,6 @@ components:
         user_id:
           format: uuid
           type: string
-      type: object
     handlers.orgCreateReq:
       properties:
         domain:
@@ -4942,7 +7453,6 @@ components:
         name:
           example: Acme Corp
           type: string
-      type: object
     handlers.orgKeyCreateReq:
       properties:
         expires_in_hours:
@@ -4951,7 +7461,6 @@ components:
         name:
           example: automation-bot
           type: string
-      type: object
     handlers.orgKeyCreateResp:
       example:
         org_key: org_key
@@ -4979,19 +7488,16 @@ components:
         scope:
           description: '"org"'
           type: string
-      type: object
     handlers.orgUpdateReq:
       properties:
         domain:
           type: string
         name:
           type: string
-      type: object
     handlers.updateMeRequest:
       properties:
         display_name:
           type: string
-      type: object
     handlers.userAPIKeyOut:
       example:
         last_used_at: last_used_at
@@ -5019,7 +7525,6 @@ components:
         scope:
           description: '"user"'
           type: string
-      type: object
     models.APIKey:
       example:
         last_used_at: 2000-01-23T04:56:07.000+00:00
@@ -5063,7 +7568,6 @@ components:
         user_id:
           format: uuid
           type: string
-      type: object
     models.Organization:
       example:
         updated_at: 2000-01-23T04:56:07.000+00:00
@@ -5086,7 +7590,6 @@ components:
         updated_at:
           format: date-time
           type: string
-      type: object
     models.User:
       example:
         is_admin: true
@@ -5118,7 +7621,6 @@ components:
         updated_at:
           format: date-time
           type: string
-      type: object
     models.UserEmail:
       example:
         is_primary: true
@@ -5159,7 +7661,6 @@ components:
         user_id:
           format: uuid
           type: string
-      type: object
     utils.ErrorResponse:
       example:
         code: code
@@ -5175,7 +7676,10 @@ components:
             Human-readable message
             example: slug is required
           type: string
-      type: object
+    GetSSHKey_200_response:
+      oneOf:
+      - $ref: "#/components/schemas/dto.SshResponse"
+      - $ref: "#/components/schemas/dto.SshRevealResponse"
   securitySchemes:
     ApiKeyAuth:
       description: User API key
@@ -5197,4 +7701,3 @@ components:
       in: header
       name: X-ORG-SECRET
       type: apiKey
-x-original-swagger-version: "2.0"

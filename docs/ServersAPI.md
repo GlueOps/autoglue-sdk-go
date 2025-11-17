@@ -1,6 +1,6 @@
 # \ServersAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -8,13 +8,14 @@ Method | HTTP request | Description
 [**DeleteServer**](ServersAPI.md#DeleteServer) | **Delete** /servers/{id} | Delete server (org scoped)
 [**GetServer**](ServersAPI.md#GetServer) | **Get** /servers/{id} | Get server by ID (org scoped)
 [**ListServers**](ServersAPI.md#ListServers) | **Get** /servers | List servers (org scoped)
+[**ResetServerHostKey**](ServersAPI.md#ResetServerHostKey) | **Post** /servers/{id}/reset-hostkey | Reset SSH host key (org scoped)
 [**UpdateServer**](ServersAPI.md#UpdateServer) | **Patch** /servers/{id} | Update server (org scoped)
 
 
 
 ## CreateServer
 
-> DtoServerResponse CreateServer(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoServerResponse CreateServer(ctx).DtoCreateServerRequest(dtoCreateServerRequest).XOrgID(xOrgID).Execute()
 
 Create server (org scoped)
 
@@ -33,12 +34,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateServerRequest() // DtoCreateServerRequest | Server payload
+	dtoCreateServerRequest := *openapiclient.NewDtoCreateServerRequest() // DtoCreateServerRequest | Server payload
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ServersAPI.CreateServer(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.ServersAPI.CreateServer(context.Background()).DtoCreateServerRequest(dtoCreateServerRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ServersAPI.CreateServer``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -59,7 +60,7 @@ Other parameters are passed through a pointer to a apiCreateServerRequest struct
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateServerRequest**](DtoCreateServerRequest.md) | Server payload | 
+ **dtoCreateServerRequest** | [**DtoCreateServerRequest**](DtoCreateServerRequest.md) | Server payload | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -82,7 +83,7 @@ Name | Type | Description  | Notes
 
 ## DeleteServer
 
-> string DeleteServer(ctx, id).XOrgID(xOrgID).Execute()
+> DeleteServer(ctx, id).XOrgID(xOrgID).Execute()
 
 Delete server (org scoped)
 
@@ -106,13 +107,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ServersAPI.DeleteServer(context.Background(), id).XOrgID(xOrgID).Execute()
+	r, err := apiClient.ServersAPI.DeleteServer(context.Background(), id).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ServersAPI.DeleteServer``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteServer`: string
-	fmt.Fprintf(os.Stdout, "Response from `ServersAPI.DeleteServer`: %v\n", resp)
 }
 ```
 
@@ -136,7 +135,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -294,9 +293,83 @@ Name | Type | Description  | Notes
 [[Back to README]](../README.md)
 
 
+## ResetServerHostKey
+
+> DtoServerResponse ResetServerHostKey(ctx, id).XOrgID(xOrgID).Body(body).Execute()
+
+Reset SSH host key (org scoped)
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/glueops/autoglue-sdk-go"
+)
+
+func main() {
+	id := "id_example" // string | Server ID (UUID)
+	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
+	body := map[string]interface{}{ ... } // map[string]interface{} |  (optional)
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.ServersAPI.ResetServerHostKey(context.Background(), id).XOrgID(xOrgID).Body(body).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `ServersAPI.ResetServerHostKey``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `ResetServerHostKey`: DtoServerResponse
+	fmt.Fprintf(os.Stdout, "Response from `ServersAPI.ResetServerHostKey`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**id** | **string** | Server ID (UUID) | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiResetServerHostKeyRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **xOrgID** | **string** | Organization UUID | 
+ **body** | **map[string]interface{}** |  | 
+
+### Return type
+
+[**DtoServerResponse**](DtoServerResponse.md)
+
+### Authorization
+
+[OrgKeyAuth](../README.md#OrgKeyAuth), [OrgSecretAuth](../README.md#OrgSecretAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
 ## UpdateServer
 
-> DtoServerResponse UpdateServer(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> DtoServerResponse UpdateServer(ctx, id).DtoUpdateServerRequest(dtoUpdateServerRequest).XOrgID(xOrgID).Execute()
 
 Update server (org scoped)
 
@@ -316,12 +389,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Server ID (UUID)
-	body := *openapiclient.NewDtoUpdateServerRequest() // DtoUpdateServerRequest | Fields to update
+	dtoUpdateServerRequest := *openapiclient.NewDtoUpdateServerRequest() // DtoUpdateServerRequest | Fields to update
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.ServersAPI.UpdateServer(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.ServersAPI.UpdateServer(context.Background(), id).DtoUpdateServerRequest(dtoUpdateServerRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `ServersAPI.UpdateServer``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -347,7 +420,7 @@ Other parameters are passed through a pointer to a apiUpdateServerRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoUpdateServerRequest**](DtoUpdateServerRequest.md) | Fields to update | 
+ **dtoUpdateServerRequest** | [**DtoUpdateServerRequest**](DtoUpdateServerRequest.md) | Fields to update | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type

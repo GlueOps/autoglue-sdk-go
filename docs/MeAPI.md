@@ -1,6 +1,6 @@
 # \MeAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -70,7 +70,7 @@ Other parameters are passed through a pointer to a apiGetMeRequest struct via th
 
 ## UpdateMe
 
-> ModelsUser UpdateMe(ctx).Body(body).Execute()
+> ModelsUser UpdateMe(ctx).HandlersUpdateMeRequest(handlersUpdateMeRequest).Execute()
 
 Update current user profile
 
@@ -87,11 +87,11 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewHandlersUpdateMeRequest() // HandlersUpdateMeRequest | Patch profile
+	handlersUpdateMeRequest := *openapiclient.NewHandlersUpdateMeRequest() // HandlersUpdateMeRequest | Patch profile
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.MeAPI.UpdateMe(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.MeAPI.UpdateMe(context.Background()).HandlersUpdateMeRequest(handlersUpdateMeRequest).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `MeAPI.UpdateMe``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -112,7 +112,7 @@ Other parameters are passed through a pointer to a apiUpdateMeRequest struct via
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**HandlersUpdateMeRequest**](HandlersUpdateMeRequest.md) | Patch profile | 
+ **handlersUpdateMeRequest** | [**HandlersUpdateMeRequest**](HandlersUpdateMeRequest.md) | Patch profile | 
 
 ### Return type
 

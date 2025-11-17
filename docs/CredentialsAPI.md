@@ -1,6 +1,6 @@
 # \CredentialsAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 ## CreateCredential
 
-> DtoCredentialOut CreateCredential(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoCredentialOut CreateCredential(ctx).DtoCreateCredentialRequest(dtoCreateCredentialRequest).XOrgID(xOrgID).Execute()
 
 Create a credential (encrypts secret)
 
@@ -32,12 +32,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateCredentialRequest("Kind_example", "Provider_example", int32(123), map[string]interface{}(123), "ScopeKind_example", int32(123), map[string]interface{}(123)) // DtoCreateCredentialRequest | Credential payload
+	dtoCreateCredentialRequest := *openapiclient.NewDtoCreateCredentialRequest("Kind_example", "Provider_example", int32(123), map[string]interface{}(123), "ScopeKind_example", int32(123), map[string]interface{}(123)) // DtoCreateCredentialRequest | Credential payload
 	xOrgID := "xOrgID_example" // string | Organization ID (UUID) (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CredentialsAPI.CreateCredential(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.CredentialsAPI.CreateCredential(context.Background()).DtoCreateCredentialRequest(dtoCreateCredentialRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CredentialsAPI.CreateCredential``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -58,7 +58,7 @@ Other parameters are passed through a pointer to a apiCreateCredentialRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateCredentialRequest**](DtoCreateCredentialRequest.md) | Credential payload | 
+ **dtoCreateCredentialRequest** | [**DtoCreateCredentialRequest**](DtoCreateCredentialRequest.md) | Credential payload | 
  **xOrgID** | **string** | Organization ID (UUID) | 
 
 ### Return type
@@ -291,7 +291,7 @@ Name | Type | Description  | Notes
 
 ## RevealCredential
 
-> map[string]interface{} RevealCredential(ctx, id).XOrgID(xOrgID).Execute()
+> map[string]interface{} RevealCredential(ctx, id).XOrgID(xOrgID).Body(body).Execute()
 
 Reveal decrypted secret (one-time read)
 
@@ -310,10 +310,11 @@ import (
 func main() {
 	id := "id_example" // string | Credential ID (UUID)
 	xOrgID := "xOrgID_example" // string | Organization ID (UUID) (optional)
+	body := map[string]interface{}{ ... } // map[string]interface{} |  (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CredentialsAPI.RevealCredential(context.Background(), id).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.CredentialsAPI.RevealCredential(context.Background(), id).XOrgID(xOrgID).Body(body).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CredentialsAPI.RevealCredential``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -340,6 +341,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **xOrgID** | **string** | Organization ID (UUID) | 
+ **body** | **map[string]interface{}** |  | 
 
 ### Return type
 
@@ -351,7 +353,7 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
@@ -361,7 +363,7 @@ Name | Type | Description  | Notes
 
 ## UpdateCredential
 
-> DtoCredentialOut UpdateCredential(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> DtoCredentialOut UpdateCredential(ctx, id).DtoUpdateCredentialRequest(dtoUpdateCredentialRequest).XOrgID(xOrgID).Execute()
 
 Update credential metadata and/or rotate secret
 
@@ -379,12 +381,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Credential ID (UUID)
-	body := *openapiclient.NewDtoUpdateCredentialRequest() // DtoUpdateCredentialRequest | Fields to update
+	dtoUpdateCredentialRequest := *openapiclient.NewDtoUpdateCredentialRequest() // DtoUpdateCredentialRequest | Fields to update
 	xOrgID := "xOrgID_example" // string | Organization ID (UUID) (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CredentialsAPI.UpdateCredential(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.CredentialsAPI.UpdateCredential(context.Background(), id).DtoUpdateCredentialRequest(dtoUpdateCredentialRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CredentialsAPI.UpdateCredential``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -410,7 +412,7 @@ Other parameters are passed through a pointer to a apiUpdateCredentialRequest st
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoUpdateCredentialRequest**](DtoUpdateCredentialRequest.md) | Fields to update | 
+ **dtoUpdateCredentialRequest** | [**DtoUpdateCredentialRequest**](DtoUpdateCredentialRequest.md) | Fields to update | 
  **xOrgID** | **string** | Organization ID (UUID) | 
 
 ### Return type

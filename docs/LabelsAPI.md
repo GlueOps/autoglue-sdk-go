@@ -1,6 +1,6 @@
 # \LabelsAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -14,7 +14,7 @@ Method | HTTP request | Description
 
 ## CreateLabel
 
-> DtoLabelResponse CreateLabel(ctx).Body(body).XOrgID(xOrgID).Execute()
+> DtoLabelResponse CreateLabel(ctx).DtoCreateLabelRequest(dtoCreateLabelRequest).XOrgID(xOrgID).Execute()
 
 Create label (org scoped)
 
@@ -33,12 +33,12 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewDtoCreateLabelRequest() // DtoCreateLabelRequest | Label payload
+	dtoCreateLabelRequest := *openapiclient.NewDtoCreateLabelRequest() // DtoCreateLabelRequest | Label payload
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LabelsAPI.CreateLabel(context.Background()).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.LabelsAPI.CreateLabel(context.Background()).DtoCreateLabelRequest(dtoCreateLabelRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.CreateLabel``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -59,7 +59,7 @@ Other parameters are passed through a pointer to a apiCreateLabelRequest struct 
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**DtoCreateLabelRequest**](DtoCreateLabelRequest.md) | Label payload | 
+ **dtoCreateLabelRequest** | [**DtoCreateLabelRequest**](DtoCreateLabelRequest.md) | Label payload | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type
@@ -82,7 +82,7 @@ Name | Type | Description  | Notes
 
 ## DeleteLabel
 
-> string DeleteLabel(ctx, id).XOrgID(xOrgID).Execute()
+> DeleteLabel(ctx, id).XOrgID(xOrgID).Execute()
 
 Delete label (org scoped)
 
@@ -106,13 +106,11 @@ func main() {
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LabelsAPI.DeleteLabel(context.Background(), id).XOrgID(xOrgID).Execute()
+	r, err := apiClient.LabelsAPI.DeleteLabel(context.Background(), id).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.DeleteLabel``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `DeleteLabel`: string
-	fmt.Fprintf(os.Stdout, "Response from `LabelsAPI.DeleteLabel`: %v\n", resp)
 }
 ```
 
@@ -136,7 +134,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-**string**
+ (empty response body)
 
 ### Authorization
 
@@ -298,7 +296,7 @@ Name | Type | Description  | Notes
 
 ## UpdateLabel
 
-> DtoLabelResponse UpdateLabel(ctx, id).Body(body).XOrgID(xOrgID).Execute()
+> DtoLabelResponse UpdateLabel(ctx, id).DtoUpdateLabelRequest(dtoUpdateLabelRequest).XOrgID(xOrgID).Execute()
 
 Update label (org scoped)
 
@@ -318,12 +316,12 @@ import (
 
 func main() {
 	id := "id_example" // string | Label ID (UUID)
-	body := *openapiclient.NewDtoUpdateLabelRequest() // DtoUpdateLabelRequest | Fields to update
+	dtoUpdateLabelRequest := *openapiclient.NewDtoUpdateLabelRequest() // DtoUpdateLabelRequest | Fields to update
 	xOrgID := "xOrgID_example" // string | Organization UUID (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.LabelsAPI.UpdateLabel(context.Background(), id).Body(body).XOrgID(xOrgID).Execute()
+	resp, r, err := apiClient.LabelsAPI.UpdateLabel(context.Background(), id).DtoUpdateLabelRequest(dtoUpdateLabelRequest).XOrgID(xOrgID).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `LabelsAPI.UpdateLabel``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -349,7 +347,7 @@ Other parameters are passed through a pointer to a apiUpdateLabelRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**DtoUpdateLabelRequest**](DtoUpdateLabelRequest.md) | Fields to update | 
+ **dtoUpdateLabelRequest** | [**DtoUpdateLabelRequest**](DtoUpdateLabelRequest.md) | Fields to update | 
  **xOrgID** | **string** | Organization UUID | 
 
 ### Return type

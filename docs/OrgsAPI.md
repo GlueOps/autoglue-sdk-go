@@ -1,6 +1,6 @@
 # \OrgsAPI
 
-All URIs are relative to */api/v1*
+All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -20,7 +20,7 @@ Method | HTTP request | Description
 
 ## AddOrUpdateMember
 
-> HandlersMemberOut AddOrUpdateMember(ctx, id).Body(body).Execute()
+> HandlersMemberOut AddOrUpdateMember(ctx, id).HandlersMemberUpsertReq(handlersMemberUpsertReq).Execute()
 
 Add or update a member (owner/admin)
 
@@ -38,11 +38,11 @@ import (
 
 func main() {
 	id := "id_example" // string | Org ID (UUID)
-	body := *openapiclient.NewHandlersMemberUpsertReq() // HandlersMemberUpsertReq | User & role
+	handlersMemberUpsertReq := *openapiclient.NewHandlersMemberUpsertReq() // HandlersMemberUpsertReq | User & role
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.OrgsAPI.AddOrUpdateMember(context.Background(), id).Body(body).Execute()
+	resp, r, err := apiClient.OrgsAPI.AddOrUpdateMember(context.Background(), id).HandlersMemberUpsertReq(handlersMemberUpsertReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `OrgsAPI.AddOrUpdateMember``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -68,7 +68,7 @@ Other parameters are passed through a pointer to a apiAddOrUpdateMemberRequest s
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**HandlersMemberUpsertReq**](HandlersMemberUpsertReq.md) | User &amp; role | 
+ **handlersMemberUpsertReq** | [**HandlersMemberUpsertReq**](HandlersMemberUpsertReq.md) | User &amp; role | 
 
 ### Return type
 
@@ -90,7 +90,7 @@ Name | Type | Description  | Notes
 
 ## CreateOrg
 
-> ModelsOrganization CreateOrg(ctx).Body(body).Execute()
+> ModelsOrganization CreateOrg(ctx).HandlersOrgCreateReq(handlersOrgCreateReq).Execute()
 
 Create organization
 
@@ -107,11 +107,11 @@ import (
 )
 
 func main() {
-	body := *openapiclient.NewHandlersOrgCreateReq() // HandlersOrgCreateReq | Org payload
+	handlersOrgCreateReq := *openapiclient.NewHandlersOrgCreateReq() // HandlersOrgCreateReq | Org payload
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.OrgsAPI.CreateOrg(context.Background()).Body(body).Execute()
+	resp, r, err := apiClient.OrgsAPI.CreateOrg(context.Background()).HandlersOrgCreateReq(handlersOrgCreateReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `OrgsAPI.CreateOrg``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -132,7 +132,7 @@ Other parameters are passed through a pointer to a apiCreateOrgRequest struct vi
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **body** | [**HandlersOrgCreateReq**](HandlersOrgCreateReq.md) | Org payload | 
+ **handlersOrgCreateReq** | [**HandlersOrgCreateReq**](HandlersOrgCreateReq.md) | Org payload | 
 
 ### Return type
 
@@ -154,7 +154,7 @@ Name | Type | Description  | Notes
 
 ## CreateOrgKey
 
-> HandlersOrgKeyCreateResp CreateOrgKey(ctx, id).Body(body).Execute()
+> HandlersOrgKeyCreateResp CreateOrgKey(ctx, id).HandlersOrgKeyCreateReq(handlersOrgKeyCreateReq).Execute()
 
 Create org key/secret pair (owner/admin)
 
@@ -172,11 +172,11 @@ import (
 
 func main() {
 	id := "id_example" // string | Org ID (UUID)
-	body := *openapiclient.NewHandlersOrgKeyCreateReq() // HandlersOrgKeyCreateReq | Key name + optional expiry
+	handlersOrgKeyCreateReq := *openapiclient.NewHandlersOrgKeyCreateReq() // HandlersOrgKeyCreateReq | Key name + optional expiry
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.OrgsAPI.CreateOrgKey(context.Background(), id).Body(body).Execute()
+	resp, r, err := apiClient.OrgsAPI.CreateOrgKey(context.Background(), id).HandlersOrgKeyCreateReq(handlersOrgKeyCreateReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `OrgsAPI.CreateOrgKey``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -202,7 +202,7 @@ Other parameters are passed through a pointer to a apiCreateOrgKeyRequest struct
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**HandlersOrgKeyCreateReq**](HandlersOrgKeyCreateReq.md) | Key name + optional expiry | 
+ **handlersOrgKeyCreateReq** | [**HandlersOrgKeyCreateReq**](HandlersOrgKeyCreateReq.md) | Key name + optional expiry | 
 
 ### Return type
 
@@ -691,7 +691,7 @@ Name | Type | Description  | Notes
 
 ## UpdateOrg
 
-> ModelsOrganization UpdateOrg(ctx, id).Body(body).Execute()
+> ModelsOrganization UpdateOrg(ctx, id).HandlersOrgUpdateReq(handlersOrgUpdateReq).Execute()
 
 Update organization (owner/admin)
 
@@ -709,11 +709,11 @@ import (
 
 func main() {
 	id := "id_example" // string | Org ID (UUID)
-	body := *openapiclient.NewHandlersOrgUpdateReq() // HandlersOrgUpdateReq | Update payload
+	handlersOrgUpdateReq := *openapiclient.NewHandlersOrgUpdateReq() // HandlersOrgUpdateReq | Update payload
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.OrgsAPI.UpdateOrg(context.Background(), id).Body(body).Execute()
+	resp, r, err := apiClient.OrgsAPI.UpdateOrg(context.Background(), id).HandlersOrgUpdateReq(handlersOrgUpdateReq).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `OrgsAPI.UpdateOrg``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -739,7 +739,7 @@ Other parameters are passed through a pointer to a apiUpdateOrgRequest struct vi
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
- **body** | [**HandlersOrgUpdateReq**](HandlersOrgUpdateReq.md) | Update payload | 
+ **handlersOrgUpdateReq** | [**HandlersOrgUpdateReq**](HandlersOrgUpdateReq.md) | Update payload | 
 
 ### Return type
 
