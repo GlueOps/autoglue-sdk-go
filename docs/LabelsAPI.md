@@ -1,6 +1,6 @@
 # \LabelsAPI
 
-All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
+All URIs are relative to *https://autoglue.glueopshosted.com/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

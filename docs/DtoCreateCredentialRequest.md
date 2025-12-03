@@ -5,9 +5,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AccountId** | Pointer to **string** |  | [optional] 
+**CredentialProvider** | **string** |  | 
 **Kind** | **string** | aws_access_key, api_token, basic_auth, oauth2 | 
 **Name** | Pointer to **string** | human label | [optional] 
-**Provider** | **string** |  | 
 **Region** | Pointer to **string** |  | [optional] 
 **SchemaVersion** | **int32** | secret schema version | 
 **Scope** | **map[string]interface{}** | {\&quot;service\&quot;:\&quot;route53\&quot;} or {\&quot;arn\&quot;:\&quot;...\&quot;} | 
@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 
 ### NewDtoCreateCredentialRequest
 
-`func NewDtoCreateCredentialRequest(kind string, provider string, schemaVersion int32, scope map[string]interface{}, scopeKind string, scopeVersion int32, secret map[string]interface{}, ) *DtoCreateCredentialRequest`
+`func NewDtoCreateCredentialRequest(credentialProvider string, kind string, schemaVersion int32, scope map[string]interface{}, scopeKind string, scopeVersion int32, secret map[string]interface{}, ) *DtoCreateCredentialRequest`
 
 NewDtoCreateCredentialRequest instantiates a new DtoCreateCredentialRequest object
 This constructor will assign default values to properties that have it defined,
@@ -58,6 +58,26 @@ SetAccountId sets AccountId field to given value.
 `func (o *DtoCreateCredentialRequest) HasAccountId() bool`
 
 HasAccountId returns a boolean if a field has been set.
+
+### GetCredentialProvider
+
+`func (o *DtoCreateCredentialRequest) GetCredentialProvider() string`
+
+GetCredentialProvider returns the CredentialProvider field if non-nil, zero value otherwise.
+
+### GetCredentialProviderOk
+
+`func (o *DtoCreateCredentialRequest) GetCredentialProviderOk() (*string, bool)`
+
+GetCredentialProviderOk returns a tuple with the CredentialProvider field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCredentialProvider
+
+`func (o *DtoCreateCredentialRequest) SetCredentialProvider(v string)`
+
+SetCredentialProvider sets CredentialProvider field to given value.
+
 
 ### GetKind
 
@@ -103,26 +123,6 @@ SetName sets Name field to given value.
 `func (o *DtoCreateCredentialRequest) HasName() bool`
 
 HasName returns a boolean if a field has been set.
-
-### GetProvider
-
-`func (o *DtoCreateCredentialRequest) GetProvider() string`
-
-GetProvider returns the Provider field if non-nil, zero value otherwise.
-
-### GetProviderOk
-
-`func (o *DtoCreateCredentialRequest) GetProviderOk() (*string, bool)`
-
-GetProviderOk returns a tuple with the Provider field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProvider
-
-`func (o *DtoCreateCredentialRequest) SetProvider(v string)`
-
-SetProvider sets Provider field to given value.
-
 
 ### GetRegion
 

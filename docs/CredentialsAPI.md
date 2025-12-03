@@ -1,6 +1,6 @@
 # \CredentialsAPI
 
-All URIs are relative to *https://autoglue.onglueops.rocks/api/v1*
+All URIs are relative to *https://autoglue.glueopshosted.com/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -32,7 +32,7 @@ import (
 )
 
 func main() {
-	dtoCreateCredentialRequest := *openapiclient.NewDtoCreateCredentialRequest("Kind_example", "Provider_example", int32(123), map[string]interface{}(123), "ScopeKind_example", int32(123), map[string]interface{}(123)) // DtoCreateCredentialRequest | Credential payload
+	dtoCreateCredentialRequest := *openapiclient.NewDtoCreateCredentialRequest("CredentialProvider_example", "Kind_example", int32(123), map[string]interface{}(123), "ScopeKind_example", int32(123), map[string]interface{}(123)) // DtoCreateCredentialRequest | Credential payload
 	xOrgID := "xOrgID_example" // string | Organization ID (UUID) (optional)
 
 	configuration := openapiclient.NewConfiguration()

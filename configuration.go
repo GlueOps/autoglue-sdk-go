@@ -93,8 +93,12 @@ func NewConfiguration() *Configuration {
 		Debug:         false,
 		Servers: ServerConfigurations{
 			{
-				URL:         "https://autoglue.onglueops.rocks/api/v1",
+				URL:         "https://autoglue.glueopshosted.com/api/v1",
 				Description: "Production API",
+			},
+			{
+				URL:         "https://autoglue.glueopshosted.rocks/api/v1",
+				Description: "Pre-Production API",
 			},
 			{
 				URL:         "https://autoglue.apps.nonprod.earth.onglueops.rocks/api/v1",

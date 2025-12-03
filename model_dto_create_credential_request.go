@@ -21,13 +21,13 @@ var _ MappedNullable = &DtoCreateCredentialRequest{}
 
 // DtoCreateCredentialRequest struct for DtoCreateCredentialRequest
 type DtoCreateCredentialRequest struct {
-	AccountId *string `json:"account_id,omitempty"`
+	AccountId          *string `json:"account_id,omitempty"`
+	CredentialProvider string  `json:"credential_provider"`
 	// aws_access_key, api_token, basic_auth, oauth2
 	Kind string `json:"kind"`
 	// human label
-	Name     *string `json:"name,omitempty"`
-	Provider string  `json:"provider"`
-	Region   *string `json:"region,omitempty"`
+	Name   *string `json:"name,omitempty"`
+	Region *string `json:"region,omitempty"`
 	// secret schema version
 	SchemaVersion int32 `json:"schema_version"`
 	// {\"service\":\"route53\"} or {\"arn\":\"...\"}
@@ -45,10 +45,10 @@ type _DtoCreateCredentialRequest DtoCreateCredentialRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewDtoCreateCredentialRequest(kind string, provider string, schemaVersion int32, scope map[string]interface{}, scopeKind string, scopeVersion int32, secret map[string]interface{}) *DtoCreateCredentialRequest {
+func NewDtoCreateCredentialRequest(credentialProvider string, kind string, schemaVersion int32, scope map[string]interface{}, scopeKind string, scopeVersion int32, secret map[string]interface{}) *DtoCreateCredentialRequest {
 	this := DtoCreateCredentialRequest{}
+	this.CredentialProvider = credentialProvider
 	this.Kind = kind
-	this.Provider = provider
 	this.SchemaVersion = schemaVersion
 	this.Scope = scope
 	this.ScopeKind = scopeKind
@@ -95,6 +95,30 @@ func (o *DtoCreateCredentialRequest) HasAccountId() bool {
 // SetAccountId gets a reference to the given string and assigns it to the AccountId field.
 func (o *DtoCreateCredentialRequest) SetAccountId(v string) {
 	o.AccountId = &v
+}
+
+// GetCredentialProvider returns the CredentialProvider field value
+func (o *DtoCreateCredentialRequest) GetCredentialProvider() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.CredentialProvider
+}
+
+// GetCredentialProviderOk returns a tuple with the CredentialProvider field value
+// and a boolean to check if the value has been set.
+func (o *DtoCreateCredentialRequest) GetCredentialProviderOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.CredentialProvider, true
+}
+
+// SetCredentialProvider sets field value
+func (o *DtoCreateCredentialRequest) SetCredentialProvider(v string) {
+	o.CredentialProvider = v
 }
 
 // GetKind returns the Kind field value
@@ -151,30 +175,6 @@ func (o *DtoCreateCredentialRequest) HasName() bool {
 // SetName gets a reference to the given string and assigns it to the Name field.
 func (o *DtoCreateCredentialRequest) SetName(v string) {
 	o.Name = &v
-}
-
-// GetProvider returns the Provider field value
-func (o *DtoCreateCredentialRequest) GetProvider() string {
-	if o == nil {
-		var ret string
-		return ret
-	}
-
-	return o.Provider
-}
-
-// GetProviderOk returns a tuple with the Provider field value
-// and a boolean to check if the value has been set.
-func (o *DtoCreateCredentialRequest) GetProviderOk() (*string, bool) {
-	if o == nil {
-		return nil, false
-	}
-	return &o.Provider, true
-}
-
-// SetProvider sets field value
-func (o *DtoCreateCredentialRequest) SetProvider(v string) {
-	o.Provider = v
 }
 
 // GetRegion returns the Region field value if set, zero value otherwise.
@@ -342,11 +342,11 @@ func (o DtoCreateCredentialRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.AccountId) {
 		toSerialize["account_id"] = o.AccountId
 	}
+	toSerialize["credential_provider"] = o.CredentialProvider
 	toSerialize["kind"] = o.Kind
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
 	}
-	toSerialize["provider"] = o.Provider
 	if !IsNil(o.Region) {
 		toSerialize["region"] = o.Region
 	}
@@ -363,8 +363,8 @@ func (o *DtoCreateCredentialRequest) UnmarshalJSON(data []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
+		"credential_provider",
 		"kind",
-		"provider",
 		"schema_version",
 		"scope",
 		"scope_kind",
