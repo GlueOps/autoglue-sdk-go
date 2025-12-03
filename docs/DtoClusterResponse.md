@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **BastionServer** | Pointer to [**DtoServerResponse**](DtoServerResponse.md) |  | [optional] 
 **CaptainDomain** | Pointer to [**DtoDomainResponse**](DtoDomainResponse.md) |  | [optional] 
 **CertificateKey** | Pointer to **string** |  | [optional] 
+**ClusterProvider** | Pointer to **string** |  | [optional] 
 **ControlPlaneRecordSet** | Pointer to [**DtoRecordSetResponse**](DtoRecordSetResponse.md) |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
 **GlueopsLoadBalancer** | Pointer to [**DtoLoadBalancerResponse**](DtoLoadBalancerResponse.md) |  | [optional] 
@@ -15,7 +16,6 @@ Name | Type | Description | Notes
 **LastError** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **NodePools** | Pointer to [**[]DtoNodePoolResponse**](DtoNodePoolResponse.md) |  | [optional] 
-**Provider** | Pointer to **string** |  | [optional] 
 **RandomToken** | Pointer to **string** |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
 **Status** | Pointer to **string** |  | [optional] 
@@ -139,6 +139,31 @@ SetCertificateKey sets CertificateKey field to given value.
 `func (o *DtoClusterResponse) HasCertificateKey() bool`
 
 HasCertificateKey returns a boolean if a field has been set.
+
+### GetClusterProvider
+
+`func (o *DtoClusterResponse) GetClusterProvider() string`
+
+GetClusterProvider returns the ClusterProvider field if non-nil, zero value otherwise.
+
+### GetClusterProviderOk
+
+`func (o *DtoClusterResponse) GetClusterProviderOk() (*string, bool)`
+
+GetClusterProviderOk returns a tuple with the ClusterProvider field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetClusterProvider
+
+`func (o *DtoClusterResponse) SetClusterProvider(v string)`
+
+SetClusterProvider sets ClusterProvider field to given value.
+
+### HasClusterProvider
+
+`func (o *DtoClusterResponse) HasClusterProvider() bool`
+
+HasClusterProvider returns a boolean if a field has been set.
 
 ### GetControlPlaneRecordSet
 
@@ -314,31 +339,6 @@ SetNodePools sets NodePools field to given value.
 `func (o *DtoClusterResponse) HasNodePools() bool`
 
 HasNodePools returns a boolean if a field has been set.
-
-### GetProvider
-
-`func (o *DtoClusterResponse) GetProvider() string`
-
-GetProvider returns the Provider field if non-nil, zero value otherwise.
-
-### GetProviderOk
-
-`func (o *DtoClusterResponse) GetProviderOk() (*string, bool)`
-
-GetProviderOk returns a tuple with the Provider field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProvider
-
-`func (o *DtoClusterResponse) SetProvider(v string)`
-
-SetProvider sets Provider field to given value.
-
-### HasProvider
-
-`func (o *DtoClusterResponse) HasProvider() bool`
-
-HasProvider returns a boolean if a field has been set.
 
 ### GetRandomToken
 

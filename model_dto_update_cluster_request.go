@@ -19,9 +19,9 @@ var _ MappedNullable = &DtoUpdateClusterRequest{}
 
 // DtoUpdateClusterRequest struct for DtoUpdateClusterRequest
 type DtoUpdateClusterRequest struct {
-	Name     *string `json:"name,omitempty"`
-	Provider *string `json:"provider,omitempty"`
-	Region   *string `json:"region,omitempty"`
+	ClusterProvider *string `json:"cluster_provider,omitempty"`
+	Name            *string `json:"name,omitempty"`
+	Region          *string `json:"region,omitempty"`
 }
 
 // NewDtoUpdateClusterRequest instantiates a new DtoUpdateClusterRequest object
@@ -39,6 +39,38 @@ func NewDtoUpdateClusterRequest() *DtoUpdateClusterRequest {
 func NewDtoUpdateClusterRequestWithDefaults() *DtoUpdateClusterRequest {
 	this := DtoUpdateClusterRequest{}
 	return &this
+}
+
+// GetClusterProvider returns the ClusterProvider field value if set, zero value otherwise.
+func (o *DtoUpdateClusterRequest) GetClusterProvider() string {
+	if o == nil || IsNil(o.ClusterProvider) {
+		var ret string
+		return ret
+	}
+	return *o.ClusterProvider
+}
+
+// GetClusterProviderOk returns a tuple with the ClusterProvider field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoUpdateClusterRequest) GetClusterProviderOk() (*string, bool) {
+	if o == nil || IsNil(o.ClusterProvider) {
+		return nil, false
+	}
+	return o.ClusterProvider, true
+}
+
+// HasClusterProvider returns a boolean if a field has been set.
+func (o *DtoUpdateClusterRequest) HasClusterProvider() bool {
+	if o != nil && !IsNil(o.ClusterProvider) {
+		return true
+	}
+
+	return false
+}
+
+// SetClusterProvider gets a reference to the given string and assigns it to the ClusterProvider field.
+func (o *DtoUpdateClusterRequest) SetClusterProvider(v string) {
+	o.ClusterProvider = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
@@ -71,38 +103,6 @@ func (o *DtoUpdateClusterRequest) HasName() bool {
 // SetName gets a reference to the given string and assigns it to the Name field.
 func (o *DtoUpdateClusterRequest) SetName(v string) {
 	o.Name = &v
-}
-
-// GetProvider returns the Provider field value if set, zero value otherwise.
-func (o *DtoUpdateClusterRequest) GetProvider() string {
-	if o == nil || IsNil(o.Provider) {
-		var ret string
-		return ret
-	}
-	return *o.Provider
-}
-
-// GetProviderOk returns a tuple with the Provider field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DtoUpdateClusterRequest) GetProviderOk() (*string, bool) {
-	if o == nil || IsNil(o.Provider) {
-		return nil, false
-	}
-	return o.Provider, true
-}
-
-// HasProvider returns a boolean if a field has been set.
-func (o *DtoUpdateClusterRequest) HasProvider() bool {
-	if o != nil && !IsNil(o.Provider) {
-		return true
-	}
-
-	return false
-}
-
-// SetProvider gets a reference to the given string and assigns it to the Provider field.
-func (o *DtoUpdateClusterRequest) SetProvider(v string) {
-	o.Provider = &v
 }
 
 // GetRegion returns the Region field value if set, zero value otherwise.
@@ -147,11 +147,11 @@ func (o DtoUpdateClusterRequest) MarshalJSON() ([]byte, error) {
 
 func (o DtoUpdateClusterRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.ClusterProvider) {
+		toSerialize["cluster_provider"] = o.ClusterProvider
+	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
-	}
-	if !IsNil(o.Provider) {
-		toSerialize["provider"] = o.Provider
 	}
 	if !IsNil(o.Region) {
 		toSerialize["region"] = o.Region

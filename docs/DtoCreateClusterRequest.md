@@ -4,8 +4,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**ClusterProvider** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
-**Provider** | Pointer to **string** |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
 
 ## Methods
@@ -26,6 +26,31 @@ will change when the set of required properties is changed
 NewDtoCreateClusterRequestWithDefaults instantiates a new DtoCreateClusterRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetClusterProvider
+
+`func (o *DtoCreateClusterRequest) GetClusterProvider() string`
+
+GetClusterProvider returns the ClusterProvider field if non-nil, zero value otherwise.
+
+### GetClusterProviderOk
+
+`func (o *DtoCreateClusterRequest) GetClusterProviderOk() (*string, bool)`
+
+GetClusterProviderOk returns a tuple with the ClusterProvider field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetClusterProvider
+
+`func (o *DtoCreateClusterRequest) SetClusterProvider(v string)`
+
+SetClusterProvider sets ClusterProvider field to given value.
+
+### HasClusterProvider
+
+`func (o *DtoCreateClusterRequest) HasClusterProvider() bool`
+
+HasClusterProvider returns a boolean if a field has been set.
 
 ### GetName
 
@@ -51,31 +76,6 @@ SetName sets Name field to given value.
 `func (o *DtoCreateClusterRequest) HasName() bool`
 
 HasName returns a boolean if a field has been set.
-
-### GetProvider
-
-`func (o *DtoCreateClusterRequest) GetProvider() string`
-
-GetProvider returns the Provider field if non-nil, zero value otherwise.
-
-### GetProviderOk
-
-`func (o *DtoCreateClusterRequest) GetProviderOk() (*string, bool)`
-
-GetProviderOk returns a tuple with the Provider field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProvider
-
-`func (o *DtoCreateClusterRequest) SetProvider(v string)`
-
-SetProvider sets Provider field to given value.
-
-### HasProvider
-
-`func (o *DtoCreateClusterRequest) HasProvider() bool`
-
-HasProvider returns a boolean if a field has been set.
 
 ### GetRegion
 

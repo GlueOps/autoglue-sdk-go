@@ -6166,7 +6166,6 @@ components:
           created_at: created_at
           private_ip_address: private_ip_address
           id: id
-        provider: provider
         random_token: random_token
         name: name
         node_pools:
@@ -6326,6 +6325,7 @@ components:
           type: type
           ttl: 0
           status: status
+        cluster_provider: cluster_provider
         status: status
       properties:
         apps_load_balancer:
@@ -6335,6 +6335,8 @@ components:
         captain_domain:
           $ref: "#/components/schemas/dto.DomainResponse"
         certificate_key:
+          type: string
+        cluster_provider:
           type: string
         control_plane_record_set:
           $ref: "#/components/schemas/dto.RecordSetResponse"
@@ -6353,8 +6355,6 @@ components:
             $ref: "#/components/schemas/dto.NodePoolResponse"
           type: array
           uniqueItems: false
-        provider:
-          type: string
         random_token:
           type: string
         region:
@@ -6371,9 +6371,9 @@ components:
           type: string
     dto.CreateClusterRequest:
       properties:
-        name:
+        cluster_provider:
           type: string
-        provider:
+        name:
           type: string
         region:
           type: string
@@ -7149,9 +7149,9 @@ components:
           type: string
     dto.UpdateClusterRequest:
       properties:
-        name:
+        cluster_provider:
           type: string
-        provider:
+        name:
           type: string
         region:
           type: string

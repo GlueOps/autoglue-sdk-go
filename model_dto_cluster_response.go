@@ -23,6 +23,7 @@ type DtoClusterResponse struct {
 	BastionServer         *DtoServerResponse       `json:"bastion_server,omitempty"`
 	CaptainDomain         *DtoDomainResponse       `json:"captain_domain,omitempty"`
 	CertificateKey        *string                  `json:"certificate_key,omitempty"`
+	ClusterProvider       *string                  `json:"cluster_provider,omitempty"`
 	ControlPlaneRecordSet *DtoRecordSetResponse    `json:"control_plane_record_set,omitempty"`
 	CreatedAt             *string                  `json:"created_at,omitempty"`
 	GlueopsLoadBalancer   *DtoLoadBalancerResponse `json:"glueops_load_balancer,omitempty"`
@@ -30,7 +31,6 @@ type DtoClusterResponse struct {
 	LastError             *string                  `json:"last_error,omitempty"`
 	Name                  *string                  `json:"name,omitempty"`
 	NodePools             []DtoNodePoolResponse    `json:"node_pools,omitempty"`
-	Provider              *string                  `json:"provider,omitempty"`
 	RandomToken           *string                  `json:"random_token,omitempty"`
 	Region                *string                  `json:"region,omitempty"`
 	Status                *string                  `json:"status,omitempty"`
@@ -180,6 +180,38 @@ func (o *DtoClusterResponse) HasCertificateKey() bool {
 // SetCertificateKey gets a reference to the given string and assigns it to the CertificateKey field.
 func (o *DtoClusterResponse) SetCertificateKey(v string) {
 	o.CertificateKey = &v
+}
+
+// GetClusterProvider returns the ClusterProvider field value if set, zero value otherwise.
+func (o *DtoClusterResponse) GetClusterProvider() string {
+	if o == nil || IsNil(o.ClusterProvider) {
+		var ret string
+		return ret
+	}
+	return *o.ClusterProvider
+}
+
+// GetClusterProviderOk returns a tuple with the ClusterProvider field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoClusterResponse) GetClusterProviderOk() (*string, bool) {
+	if o == nil || IsNil(o.ClusterProvider) {
+		return nil, false
+	}
+	return o.ClusterProvider, true
+}
+
+// HasClusterProvider returns a boolean if a field has been set.
+func (o *DtoClusterResponse) HasClusterProvider() bool {
+	if o != nil && !IsNil(o.ClusterProvider) {
+		return true
+	}
+
+	return false
+}
+
+// SetClusterProvider gets a reference to the given string and assigns it to the ClusterProvider field.
+func (o *DtoClusterResponse) SetClusterProvider(v string) {
+	o.ClusterProvider = &v
 }
 
 // GetControlPlaneRecordSet returns the ControlPlaneRecordSet field value if set, zero value otherwise.
@@ -406,38 +438,6 @@ func (o *DtoClusterResponse) SetNodePools(v []DtoNodePoolResponse) {
 	o.NodePools = v
 }
 
-// GetProvider returns the Provider field value if set, zero value otherwise.
-func (o *DtoClusterResponse) GetProvider() string {
-	if o == nil || IsNil(o.Provider) {
-		var ret string
-		return ret
-	}
-	return *o.Provider
-}
-
-// GetProviderOk returns a tuple with the Provider field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DtoClusterResponse) GetProviderOk() (*string, bool) {
-	if o == nil || IsNil(o.Provider) {
-		return nil, false
-	}
-	return o.Provider, true
-}
-
-// HasProvider returns a boolean if a field has been set.
-func (o *DtoClusterResponse) HasProvider() bool {
-	if o != nil && !IsNil(o.Provider) {
-		return true
-	}
-
-	return false
-}
-
-// SetProvider gets a reference to the given string and assigns it to the Provider field.
-func (o *DtoClusterResponse) SetProvider(v string) {
-	o.Provider = &v
-}
-
 // GetRandomToken returns the RandomToken field value if set, zero value otherwise.
 func (o *DtoClusterResponse) GetRandomToken() string {
 	if o == nil || IsNil(o.RandomToken) {
@@ -588,6 +588,9 @@ func (o DtoClusterResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CertificateKey) {
 		toSerialize["certificate_key"] = o.CertificateKey
 	}
+	if !IsNil(o.ClusterProvider) {
+		toSerialize["cluster_provider"] = o.ClusterProvider
+	}
 	if !IsNil(o.ControlPlaneRecordSet) {
 		toSerialize["control_plane_record_set"] = o.ControlPlaneRecordSet
 	}
@@ -608,9 +611,6 @@ func (o DtoClusterResponse) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.NodePools) {
 		toSerialize["node_pools"] = o.NodePools
-	}
-	if !IsNil(o.Provider) {
-		toSerialize["provider"] = o.Provider
 	}
 	if !IsNil(o.RandomToken) {
 		toSerialize["random_token"] = o.RandomToken
