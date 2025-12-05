@@ -6,10 +6,10 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AccountId** | Pointer to **string** |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
+**CredentialProvider** | Pointer to **string** |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
 **Kind** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
-**Provider** | Pointer to **string** |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
 **SchemaVersion** | Pointer to **int32** |  | [optional] 
 **Scope** | Pointer to **map[string]interface{}** |  | [optional] 
@@ -86,6 +86,31 @@ SetCreatedAt sets CreatedAt field to given value.
 
 HasCreatedAt returns a boolean if a field has been set.
 
+### GetCredentialProvider
+
+`func (o *DtoCredentialOut) GetCredentialProvider() string`
+
+GetCredentialProvider returns the CredentialProvider field if non-nil, zero value otherwise.
+
+### GetCredentialProviderOk
+
+`func (o *DtoCredentialOut) GetCredentialProviderOk() (*string, bool)`
+
+GetCredentialProviderOk returns a tuple with the CredentialProvider field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCredentialProvider
+
+`func (o *DtoCredentialOut) SetCredentialProvider(v string)`
+
+SetCredentialProvider sets CredentialProvider field to given value.
+
+### HasCredentialProvider
+
+`func (o *DtoCredentialOut) HasCredentialProvider() bool`
+
+HasCredentialProvider returns a boolean if a field has been set.
+
 ### GetId
 
 `func (o *DtoCredentialOut) GetId() string`
@@ -160,31 +185,6 @@ SetName sets Name field to given value.
 `func (o *DtoCredentialOut) HasName() bool`
 
 HasName returns a boolean if a field has been set.
-
-### GetProvider
-
-`func (o *DtoCredentialOut) GetProvider() string`
-
-GetProvider returns the Provider field if non-nil, zero value otherwise.
-
-### GetProviderOk
-
-`func (o *DtoCredentialOut) GetProviderOk() (*string, bool)`
-
-GetProviderOk returns a tuple with the Provider field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetProvider
-
-`func (o *DtoCredentialOut) SetProvider(v string)`
-
-SetProvider sets Provider field to given value.
-
-### HasProvider
-
-`func (o *DtoCredentialOut) HasProvider() bool`
-
-HasProvider returns a boolean if a field has been set.
 
 ### GetRegion
 

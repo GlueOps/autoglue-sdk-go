@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **CaptainDomain** | Pointer to [**DtoDomainResponse**](DtoDomainResponse.md) |  | [optional] 
 **CertificateKey** | Pointer to **string** |  | [optional] 
 **ClusterProvider** | Pointer to **string** |  | [optional] 
+**ControlPlaneFqdn** | Pointer to **string** |  | [optional] 
 **ControlPlaneRecordSet** | Pointer to [**DtoRecordSetResponse**](DtoRecordSetResponse.md) |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
 **GlueopsLoadBalancer** | Pointer to [**DtoLoadBalancerResponse**](DtoLoadBalancerResponse.md) |  | [optional] 
@@ -164,6 +165,31 @@ SetClusterProvider sets ClusterProvider field to given value.
 `func (o *DtoClusterResponse) HasClusterProvider() bool`
 
 HasClusterProvider returns a boolean if a field has been set.
+
+### GetControlPlaneFqdn
+
+`func (o *DtoClusterResponse) GetControlPlaneFqdn() string`
+
+GetControlPlaneFqdn returns the ControlPlaneFqdn field if non-nil, zero value otherwise.
+
+### GetControlPlaneFqdnOk
+
+`func (o *DtoClusterResponse) GetControlPlaneFqdnOk() (*string, bool)`
+
+GetControlPlaneFqdnOk returns a tuple with the ControlPlaneFqdn field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetControlPlaneFqdn
+
+`func (o *DtoClusterResponse) SetControlPlaneFqdn(v string)`
+
+SetControlPlaneFqdn sets ControlPlaneFqdn field to given value.
+
+### HasControlPlaneFqdn
+
+`func (o *DtoClusterResponse) HasControlPlaneFqdn() bool`
+
+HasControlPlaneFqdn returns a boolean if a field has been set.
 
 ### GetControlPlaneRecordSet
 

@@ -19,18 +19,18 @@ var _ MappedNullable = &DtoCredentialOut{}
 
 // DtoCredentialOut struct for DtoCredentialOut
 type DtoCredentialOut struct {
-	AccountId     *string                `json:"account_id,omitempty"`
-	CreatedAt     *string                `json:"created_at,omitempty"`
-	Id            *string                `json:"id,omitempty"`
-	Kind          *string                `json:"kind,omitempty"`
-	Name          *string                `json:"name,omitempty"`
-	Provider      *string                `json:"provider,omitempty"`
-	Region        *string                `json:"region,omitempty"`
-	SchemaVersion *int32                 `json:"schema_version,omitempty"`
-	Scope         map[string]interface{} `json:"scope,omitempty"`
-	ScopeKind     *string                `json:"scope_kind,omitempty"`
-	ScopeVersion  *int32                 `json:"scope_version,omitempty"`
-	UpdatedAt     *string                `json:"updated_at,omitempty"`
+	AccountId          *string                `json:"account_id,omitempty"`
+	CreatedAt          *string                `json:"created_at,omitempty"`
+	CredentialProvider *string                `json:"credential_provider,omitempty"`
+	Id                 *string                `json:"id,omitempty"`
+	Kind               *string                `json:"kind,omitempty"`
+	Name               *string                `json:"name,omitempty"`
+	Region             *string                `json:"region,omitempty"`
+	SchemaVersion      *int32                 `json:"schema_version,omitempty"`
+	Scope              map[string]interface{} `json:"scope,omitempty"`
+	ScopeKind          *string                `json:"scope_kind,omitempty"`
+	ScopeVersion       *int32                 `json:"scope_version,omitempty"`
+	UpdatedAt          *string                `json:"updated_at,omitempty"`
 }
 
 // NewDtoCredentialOut instantiates a new DtoCredentialOut object
@@ -112,6 +112,38 @@ func (o *DtoCredentialOut) HasCreatedAt() bool {
 // SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
 func (o *DtoCredentialOut) SetCreatedAt(v string) {
 	o.CreatedAt = &v
+}
+
+// GetCredentialProvider returns the CredentialProvider field value if set, zero value otherwise.
+func (o *DtoCredentialOut) GetCredentialProvider() string {
+	if o == nil || IsNil(o.CredentialProvider) {
+		var ret string
+		return ret
+	}
+	return *o.CredentialProvider
+}
+
+// GetCredentialProviderOk returns a tuple with the CredentialProvider field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoCredentialOut) GetCredentialProviderOk() (*string, bool) {
+	if o == nil || IsNil(o.CredentialProvider) {
+		return nil, false
+	}
+	return o.CredentialProvider, true
+}
+
+// HasCredentialProvider returns a boolean if a field has been set.
+func (o *DtoCredentialOut) HasCredentialProvider() bool {
+	if o != nil && !IsNil(o.CredentialProvider) {
+		return true
+	}
+
+	return false
+}
+
+// SetCredentialProvider gets a reference to the given string and assigns it to the CredentialProvider field.
+func (o *DtoCredentialOut) SetCredentialProvider(v string) {
+	o.CredentialProvider = &v
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
@@ -208,38 +240,6 @@ func (o *DtoCredentialOut) HasName() bool {
 // SetName gets a reference to the given string and assigns it to the Name field.
 func (o *DtoCredentialOut) SetName(v string) {
 	o.Name = &v
-}
-
-// GetProvider returns the Provider field value if set, zero value otherwise.
-func (o *DtoCredentialOut) GetProvider() string {
-	if o == nil || IsNil(o.Provider) {
-		var ret string
-		return ret
-	}
-	return *o.Provider
-}
-
-// GetProviderOk returns a tuple with the Provider field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *DtoCredentialOut) GetProviderOk() (*string, bool) {
-	if o == nil || IsNil(o.Provider) {
-		return nil, false
-	}
-	return o.Provider, true
-}
-
-// HasProvider returns a boolean if a field has been set.
-func (o *DtoCredentialOut) HasProvider() bool {
-	if o != nil && !IsNil(o.Provider) {
-		return true
-	}
-
-	return false
-}
-
-// SetProvider gets a reference to the given string and assigns it to the Provider field.
-func (o *DtoCredentialOut) SetProvider(v string) {
-	o.Provider = &v
 }
 
 // GetRegion returns the Region field value if set, zero value otherwise.
@@ -450,6 +450,9 @@ func (o DtoCredentialOut) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
 	}
+	if !IsNil(o.CredentialProvider) {
+		toSerialize["credential_provider"] = o.CredentialProvider
+	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
@@ -458,9 +461,6 @@ func (o DtoCredentialOut) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
-	}
-	if !IsNil(o.Provider) {
-		toSerialize["provider"] = o.Provider
 	}
 	if !IsNil(o.Region) {
 		toSerialize["region"] = o.Region

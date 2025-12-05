@@ -24,6 +24,7 @@ type DtoClusterResponse struct {
 	CaptainDomain         *DtoDomainResponse       `json:"captain_domain,omitempty"`
 	CertificateKey        *string                  `json:"certificate_key,omitempty"`
 	ClusterProvider       *string                  `json:"cluster_provider,omitempty"`
+	ControlPlaneFqdn      *string                  `json:"control_plane_fqdn,omitempty"`
 	ControlPlaneRecordSet *DtoRecordSetResponse    `json:"control_plane_record_set,omitempty"`
 	CreatedAt             *string                  `json:"created_at,omitempty"`
 	GlueopsLoadBalancer   *DtoLoadBalancerResponse `json:"glueops_load_balancer,omitempty"`
@@ -212,6 +213,38 @@ func (o *DtoClusterResponse) HasClusterProvider() bool {
 // SetClusterProvider gets a reference to the given string and assigns it to the ClusterProvider field.
 func (o *DtoClusterResponse) SetClusterProvider(v string) {
 	o.ClusterProvider = &v
+}
+
+// GetControlPlaneFqdn returns the ControlPlaneFqdn field value if set, zero value otherwise.
+func (o *DtoClusterResponse) GetControlPlaneFqdn() string {
+	if o == nil || IsNil(o.ControlPlaneFqdn) {
+		var ret string
+		return ret
+	}
+	return *o.ControlPlaneFqdn
+}
+
+// GetControlPlaneFqdnOk returns a tuple with the ControlPlaneFqdn field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoClusterResponse) GetControlPlaneFqdnOk() (*string, bool) {
+	if o == nil || IsNil(o.ControlPlaneFqdn) {
+		return nil, false
+	}
+	return o.ControlPlaneFqdn, true
+}
+
+// HasControlPlaneFqdn returns a boolean if a field has been set.
+func (o *DtoClusterResponse) HasControlPlaneFqdn() bool {
+	if o != nil && !IsNil(o.ControlPlaneFqdn) {
+		return true
+	}
+
+	return false
+}
+
+// SetControlPlaneFqdn gets a reference to the given string and assigns it to the ControlPlaneFqdn field.
+func (o *DtoClusterResponse) SetControlPlaneFqdn(v string) {
+	o.ControlPlaneFqdn = &v
 }
 
 // GetControlPlaneRecordSet returns the ControlPlaneRecordSet field value if set, zero value otherwise.
@@ -590,6 +623,9 @@ func (o DtoClusterResponse) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.ClusterProvider) {
 		toSerialize["cluster_provider"] = o.ClusterProvider
+	}
+	if !IsNil(o.ControlPlaneFqdn) {
+		toSerialize["control_plane_fqdn"] = o.ControlPlaneFqdn
 	}
 	if !IsNil(o.ControlPlaneRecordSet) {
 		toSerialize["control_plane_record_set"] = o.ControlPlaneRecordSet

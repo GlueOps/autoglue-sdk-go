@@ -555,12 +555,12 @@ func (a *CredentialsAPIService) GetCredentialExecute(r ApiGetCredentialRequest) 
 }
 
 type ApiListCredentialsRequest struct {
-	ctx        context.Context
-	ApiService *CredentialsAPIService
-	xOrgID     *string
-	provider   *string
-	kind       *string
-	scopeKind  *string
+	ctx                context.Context
+	ApiService         *CredentialsAPIService
+	xOrgID             *string
+	credentialProvider *string
+	kind               *string
+	scopeKind          *string
 }
 
 // Organization ID (UUID)
@@ -570,8 +570,8 @@ func (r ApiListCredentialsRequest) XOrgID(xOrgID string) ApiListCredentialsReque
 }
 
 // Filter by provider (e.g., aws)
-func (r ApiListCredentialsRequest) Provider(provider string) ApiListCredentialsRequest {
-	r.provider = &provider
+func (r ApiListCredentialsRequest) CredentialProvider(credentialProvider string) ApiListCredentialsRequest {
+	r.credentialProvider = &credentialProvider
 	return r
 }
 
@@ -581,7 +581,7 @@ func (r ApiListCredentialsRequest) Kind(kind string) ApiListCredentialsRequest {
 	return r
 }
 
-// Filter by scope kind (provider/service/resource)
+// Filter by scope kind (credential_provider/service/resource)
 func (r ApiListCredentialsRequest) ScopeKind(scopeKind string) ApiListCredentialsRequest {
 	r.scopeKind = &scopeKind
 	return r
@@ -628,8 +628,8 @@ func (a *CredentialsAPIService) ListCredentialsExecute(r ApiListCredentialsReque
 	localVarQueryParams := url.Values{}
 	localVarFormParams := url.Values{}
 
-	if r.provider != nil {
-		parameterAddToHeaderOrQuery(localVarQueryParams, "provider", r.provider, "form", "")
+	if r.credentialProvider != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "credential_provider", r.credentialProvider, "form", "")
 	}
 	if r.kind != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "kind", r.kind, "form", "")

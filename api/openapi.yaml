@@ -2013,7 +2013,7 @@ paths:
       - description: "Filter by provider (e.g., aws)"
         explode: true
         in: query
-        name: provider
+        name: credential_provider
         required: false
         schema:
           type: string
@@ -2026,7 +2026,7 @@ paths:
         schema:
           type: string
         style: form
-      - description: Filter by scope kind (provider/service/resource)
+      - description: Filter by scope kind (credential_provider/service/resource)
         explode: true
         in: query
         name: scope_kind
@@ -6136,6 +6136,7 @@ components:
           ssh_user: ssh_user
           status: pending|provisioning|ready|failed
         certificate_key: certificate_key
+        control_plane_fqdn: control_plane_fqdn
         created_at: created_at
         glueops_load_balancer:
           public_ip_address: public_ip_address
@@ -6338,6 +6339,8 @@ components:
           type: string
         cluster_provider:
           type: string
+        control_plane_fqdn:
+          type: string
         control_plane_record_set:
           $ref: "#/components/schemas/dto.RecordSetResponse"
         created_at:
@@ -6409,7 +6412,7 @@ components:
           type: object
         scope_kind:
           enum:
-          - provider
+          - credential_provider
           - service
           - resource
           type: string
@@ -6548,7 +6551,7 @@ components:
         account_id: account_id
         scope_version: 6
         updated_at: updated_at
-        provider: provider
+        credential_provider: credential_provider
         kind: kind
         scope: "{}"
         name: name
@@ -6561,13 +6564,13 @@ components:
           type: string
         created_at:
           type: string
+        credential_provider:
+          type: string
         id:
           type: string
         kind:
           type: string
         name:
-          type: string
-        provider:
           type: string
         region:
           type: string

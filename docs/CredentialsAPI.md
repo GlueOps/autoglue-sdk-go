@@ -219,7 +219,7 @@ Name | Type | Description  | Notes
 
 ## ListCredentials
 
-> []DtoCredentialOut ListCredentials(ctx).XOrgID(xOrgID).Provider(provider).Kind(kind).ScopeKind(scopeKind).Execute()
+> []DtoCredentialOut ListCredentials(ctx).XOrgID(xOrgID).CredentialProvider(credentialProvider).Kind(kind).ScopeKind(scopeKind).Execute()
 
 List credentials (metadata only)
 
@@ -239,13 +239,13 @@ import (
 
 func main() {
 	xOrgID := "xOrgID_example" // string | Organization ID (UUID) (optional)
-	provider := "provider_example" // string | Filter by provider (e.g., aws) (optional)
+	credentialProvider := "credentialProvider_example" // string | Filter by provider (e.g., aws) (optional)
 	kind := "kind_example" // string | Filter by kind (e.g., aws_access_key) (optional)
-	scopeKind := "scopeKind_example" // string | Filter by scope kind (provider/service/resource) (optional)
+	scopeKind := "scopeKind_example" // string | Filter by scope kind (credential_provider/service/resource) (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.CredentialsAPI.ListCredentials(context.Background()).XOrgID(xOrgID).Provider(provider).Kind(kind).ScopeKind(scopeKind).Execute()
+	resp, r, err := apiClient.CredentialsAPI.ListCredentials(context.Background()).XOrgID(xOrgID).CredentialProvider(credentialProvider).Kind(kind).ScopeKind(scopeKind).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `CredentialsAPI.ListCredentials``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -267,9 +267,9 @@ Other parameters are passed through a pointer to a apiListCredentialsRequest str
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **xOrgID** | **string** | Organization ID (UUID) | 
- **provider** | **string** | Filter by provider (e.g., aws) | 
+ **credentialProvider** | **string** | Filter by provider (e.g., aws) | 
  **kind** | **string** | Filter by kind (e.g., aws_access_key) | 
- **scopeKind** | **string** | Filter by scope kind (provider/service/resource) | 
+ **scopeKind** | **string** | Filter by scope kind (credential_provider/service/resource) | 
 
 ### Return type
 
