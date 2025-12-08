@@ -12,6 +12,8 @@ Name | Type | Description | Notes
 **ControlPlaneFqdn** | Pointer to **string** |  | [optional] 
 **ControlPlaneRecordSet** | Pointer to [**DtoRecordSetResponse**](DtoRecordSetResponse.md) |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
+**DockerImage** | Pointer to **string** |  | [optional] 
+**DockerTag** | Pointer to **string** |  | [optional] 
 **GlueopsLoadBalancer** | Pointer to [**DtoLoadBalancerResponse**](DtoLoadBalancerResponse.md) |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
 **LastError** | Pointer to **string** |  | [optional] 
@@ -240,6 +242,56 @@ SetCreatedAt sets CreatedAt field to given value.
 `func (o *DtoClusterResponse) HasCreatedAt() bool`
 
 HasCreatedAt returns a boolean if a field has been set.
+
+### GetDockerImage
+
+`func (o *DtoClusterResponse) GetDockerImage() string`
+
+GetDockerImage returns the DockerImage field if non-nil, zero value otherwise.
+
+### GetDockerImageOk
+
+`func (o *DtoClusterResponse) GetDockerImageOk() (*string, bool)`
+
+GetDockerImageOk returns a tuple with the DockerImage field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDockerImage
+
+`func (o *DtoClusterResponse) SetDockerImage(v string)`
+
+SetDockerImage sets DockerImage field to given value.
+
+### HasDockerImage
+
+`func (o *DtoClusterResponse) HasDockerImage() bool`
+
+HasDockerImage returns a boolean if a field has been set.
+
+### GetDockerTag
+
+`func (o *DtoClusterResponse) GetDockerTag() string`
+
+GetDockerTag returns the DockerTag field if non-nil, zero value otherwise.
+
+### GetDockerTagOk
+
+`func (o *DtoClusterResponse) GetDockerTagOk() (*string, bool)`
+
+GetDockerTagOk returns a tuple with the DockerTag field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDockerTag
+
+`func (o *DtoClusterResponse) SetDockerTag(v string)`
+
+SetDockerTag sets DockerTag field to given value.
+
+### HasDockerTag
+
+`func (o *DtoClusterResponse) HasDockerTag() bool`
+
+HasDockerTag returns a boolean if a field has been set.
 
 ### GetGlueopsLoadBalancer
 

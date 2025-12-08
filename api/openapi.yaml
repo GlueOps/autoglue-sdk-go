@@ -6135,6 +6135,7 @@ components:
           id: id
           ssh_user: ssh_user
           status: pending|provisioning|ready|failed
+        docker_tag: docker_tag
         certificate_key: certificate_key
         control_plane_fqdn: control_plane_fqdn
         created_at: created_at
@@ -6327,6 +6328,7 @@ components:
           ttl: 0
           status: status
         cluster_provider: cluster_provider
+        docker_image: docker_image
         status: status
       properties:
         apps_load_balancer:
@@ -6344,6 +6346,10 @@ components:
         control_plane_record_set:
           $ref: "#/components/schemas/dto.RecordSetResponse"
         created_at:
+          type: string
+        docker_image:
+          type: string
+        docker_tag:
           type: string
         glueops_load_balancer:
           $ref: "#/components/schemas/dto.LoadBalancerResponse"
@@ -6375,6 +6381,10 @@ components:
     dto.CreateClusterRequest:
       properties:
         cluster_provider:
+          type: string
+        docker_image:
+          type: string
+        docker_tag:
           type: string
         name:
           type: string
@@ -7153,6 +7163,10 @@ components:
     dto.UpdateClusterRequest:
       properties:
         cluster_provider:
+          type: string
+        docker_image:
+          type: string
+        docker_tag:
           type: string
         name:
           type: string

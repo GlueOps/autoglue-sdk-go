@@ -5,6 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **ClusterProvider** | Pointer to **string** |  | [optional] 
+**DockerImage** | Pointer to **string** |  | [optional] 
+**DockerTag** | Pointer to **string** |  | [optional] 
 **Name** | Pointer to **string** |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
 
@@ -51,6 +53,56 @@ SetClusterProvider sets ClusterProvider field to given value.
 `func (o *DtoUpdateClusterRequest) HasClusterProvider() bool`
 
 HasClusterProvider returns a boolean if a field has been set.
+
+### GetDockerImage
+
+`func (o *DtoUpdateClusterRequest) GetDockerImage() string`
+
+GetDockerImage returns the DockerImage field if non-nil, zero value otherwise.
+
+### GetDockerImageOk
+
+`func (o *DtoUpdateClusterRequest) GetDockerImageOk() (*string, bool)`
+
+GetDockerImageOk returns a tuple with the DockerImage field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDockerImage
+
+`func (o *DtoUpdateClusterRequest) SetDockerImage(v string)`
+
+SetDockerImage sets DockerImage field to given value.
+
+### HasDockerImage
+
+`func (o *DtoUpdateClusterRequest) HasDockerImage() bool`
+
+HasDockerImage returns a boolean if a field has been set.
+
+### GetDockerTag
+
+`func (o *DtoUpdateClusterRequest) GetDockerTag() string`
+
+GetDockerTag returns the DockerTag field if non-nil, zero value otherwise.
+
+### GetDockerTagOk
+
+`func (o *DtoUpdateClusterRequest) GetDockerTagOk() (*string, bool)`
+
+GetDockerTagOk returns a tuple with the DockerTag field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDockerTag
+
+`func (o *DtoUpdateClusterRequest) SetDockerTag(v string)`
+
+SetDockerTag sets DockerTag field to given value.
+
+### HasDockerTag
+
+`func (o *DtoUpdateClusterRequest) HasDockerTag() bool`
+
+HasDockerTag returns a boolean if a field has been set.
 
 ### GetName
 

@@ -27,6 +27,8 @@ type DtoClusterResponse struct {
 	ControlPlaneFqdn      *string                  `json:"control_plane_fqdn,omitempty"`
 	ControlPlaneRecordSet *DtoRecordSetResponse    `json:"control_plane_record_set,omitempty"`
 	CreatedAt             *string                  `json:"created_at,omitempty"`
+	DockerImage           *string                  `json:"docker_image,omitempty"`
+	DockerTag             *string                  `json:"docker_tag,omitempty"`
 	GlueopsLoadBalancer   *DtoLoadBalancerResponse `json:"glueops_load_balancer,omitempty"`
 	Id                    *string                  `json:"id,omitempty"`
 	LastError             *string                  `json:"last_error,omitempty"`
@@ -309,6 +311,70 @@ func (o *DtoClusterResponse) HasCreatedAt() bool {
 // SetCreatedAt gets a reference to the given string and assigns it to the CreatedAt field.
 func (o *DtoClusterResponse) SetCreatedAt(v string) {
 	o.CreatedAt = &v
+}
+
+// GetDockerImage returns the DockerImage field value if set, zero value otherwise.
+func (o *DtoClusterResponse) GetDockerImage() string {
+	if o == nil || IsNil(o.DockerImage) {
+		var ret string
+		return ret
+	}
+	return *o.DockerImage
+}
+
+// GetDockerImageOk returns a tuple with the DockerImage field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoClusterResponse) GetDockerImageOk() (*string, bool) {
+	if o == nil || IsNil(o.DockerImage) {
+		return nil, false
+	}
+	return o.DockerImage, true
+}
+
+// HasDockerImage returns a boolean if a field has been set.
+func (o *DtoClusterResponse) HasDockerImage() bool {
+	if o != nil && !IsNil(o.DockerImage) {
+		return true
+	}
+
+	return false
+}
+
+// SetDockerImage gets a reference to the given string and assigns it to the DockerImage field.
+func (o *DtoClusterResponse) SetDockerImage(v string) {
+	o.DockerImage = &v
+}
+
+// GetDockerTag returns the DockerTag field value if set, zero value otherwise.
+func (o *DtoClusterResponse) GetDockerTag() string {
+	if o == nil || IsNil(o.DockerTag) {
+		var ret string
+		return ret
+	}
+	return *o.DockerTag
+}
+
+// GetDockerTagOk returns a tuple with the DockerTag field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoClusterResponse) GetDockerTagOk() (*string, bool) {
+	if o == nil || IsNil(o.DockerTag) {
+		return nil, false
+	}
+	return o.DockerTag, true
+}
+
+// HasDockerTag returns a boolean if a field has been set.
+func (o *DtoClusterResponse) HasDockerTag() bool {
+	if o != nil && !IsNil(o.DockerTag) {
+		return true
+	}
+
+	return false
+}
+
+// SetDockerTag gets a reference to the given string and assigns it to the DockerTag field.
+func (o *DtoClusterResponse) SetDockerTag(v string) {
+	o.DockerTag = &v
 }
 
 // GetGlueopsLoadBalancer returns the GlueopsLoadBalancer field value if set, zero value otherwise.
@@ -632,6 +698,12 @@ func (o DtoClusterResponse) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
+	}
+	if !IsNil(o.DockerImage) {
+		toSerialize["docker_image"] = o.DockerImage
+	}
+	if !IsNil(o.DockerTag) {
+		toSerialize["docker_tag"] = o.DockerTag
 	}
 	if !IsNil(o.GlueopsLoadBalancer) {
 		toSerialize["glueops_load_balancer"] = o.GlueopsLoadBalancer

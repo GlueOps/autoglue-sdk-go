@@ -20,6 +20,8 @@ var _ MappedNullable = &DtoUpdateClusterRequest{}
 // DtoUpdateClusterRequest struct for DtoUpdateClusterRequest
 type DtoUpdateClusterRequest struct {
 	ClusterProvider *string `json:"cluster_provider,omitempty"`
+	DockerImage     *string `json:"docker_image,omitempty"`
+	DockerTag       *string `json:"docker_tag,omitempty"`
 	Name            *string `json:"name,omitempty"`
 	Region          *string `json:"region,omitempty"`
 }
@@ -71,6 +73,70 @@ func (o *DtoUpdateClusterRequest) HasClusterProvider() bool {
 // SetClusterProvider gets a reference to the given string and assigns it to the ClusterProvider field.
 func (o *DtoUpdateClusterRequest) SetClusterProvider(v string) {
 	o.ClusterProvider = &v
+}
+
+// GetDockerImage returns the DockerImage field value if set, zero value otherwise.
+func (o *DtoUpdateClusterRequest) GetDockerImage() string {
+	if o == nil || IsNil(o.DockerImage) {
+		var ret string
+		return ret
+	}
+	return *o.DockerImage
+}
+
+// GetDockerImageOk returns a tuple with the DockerImage field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoUpdateClusterRequest) GetDockerImageOk() (*string, bool) {
+	if o == nil || IsNil(o.DockerImage) {
+		return nil, false
+	}
+	return o.DockerImage, true
+}
+
+// HasDockerImage returns a boolean if a field has been set.
+func (o *DtoUpdateClusterRequest) HasDockerImage() bool {
+	if o != nil && !IsNil(o.DockerImage) {
+		return true
+	}
+
+	return false
+}
+
+// SetDockerImage gets a reference to the given string and assigns it to the DockerImage field.
+func (o *DtoUpdateClusterRequest) SetDockerImage(v string) {
+	o.DockerImage = &v
+}
+
+// GetDockerTag returns the DockerTag field value if set, zero value otherwise.
+func (o *DtoUpdateClusterRequest) GetDockerTag() string {
+	if o == nil || IsNil(o.DockerTag) {
+		var ret string
+		return ret
+	}
+	return *o.DockerTag
+}
+
+// GetDockerTagOk returns a tuple with the DockerTag field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DtoUpdateClusterRequest) GetDockerTagOk() (*string, bool) {
+	if o == nil || IsNil(o.DockerTag) {
+		return nil, false
+	}
+	return o.DockerTag, true
+}
+
+// HasDockerTag returns a boolean if a field has been set.
+func (o *DtoUpdateClusterRequest) HasDockerTag() bool {
+	if o != nil && !IsNil(o.DockerTag) {
+		return true
+	}
+
+	return false
+}
+
+// SetDockerTag gets a reference to the given string and assigns it to the DockerTag field.
+func (o *DtoUpdateClusterRequest) SetDockerTag(v string) {
+	o.DockerTag = &v
 }
 
 // GetName returns the Name field value if set, zero value otherwise.
@@ -149,6 +215,12 @@ func (o DtoUpdateClusterRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.ClusterProvider) {
 		toSerialize["cluster_provider"] = o.ClusterProvider
+	}
+	if !IsNil(o.DockerImage) {
+		toSerialize["docker_image"] = o.DockerImage
+	}
+	if !IsNil(o.DockerTag) {
+		toSerialize["docker_tag"] = o.DockerTag
 	}
 	if !IsNil(o.Name) {
 		toSerialize["name"] = o.Name
